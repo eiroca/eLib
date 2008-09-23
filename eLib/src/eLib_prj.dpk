@@ -1,0 +1,47 @@
+package eLib_prj;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS ON}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$IMPLICITBUILD OFF}
+
+requires
+  rtl,
+  vcl,
+  dbrtl,
+  bdertl;
+
+contains
+  eLib in 'lib\eLib.pas',
+  eRX in 'lib\eRX.pas',
+  eLibMath in 'lib\eLibMath.pas',
+  eHashList in 'lib\eHashList.pas',
+  eLibComplex in 'lib\eLibComplex.pas',
+  eLibSystem in 'lib\eLibSystem.pas',
+  eTAGExtractor in 'lib\eTAGExtractor.pas',
+  eLibDB in 'lib\eLibDB.pas',
+  eLibBDE in 'lib\eLibBDE.pas',
+  eLibVCL in 'lib\eLibVCL.pas',
+  eWait in 'lib\eWait.pas',
+  FAbout in 'lib\FAbout.pas';
+
+end.
