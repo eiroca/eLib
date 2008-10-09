@@ -25,10 +25,7 @@ uses
   SysUtils, Classes, eCompUtil;
 
 type
-  PPattern = ^TPattern;
-  TPattern = array[0..9999] of double; (* dynamic allocated! *)
-
-  TPatternKind = (pkInput, pkOutput);
+  TData = array of double; (* dynamic allocated! *)
 
   TListener = class
     public
@@ -48,6 +45,7 @@ type
      destructor  Destroy; override;
   end;
 
+type
   TDataPickerClass = class of TDataPicker;
 
   TDataPicker = class(TComponent)
@@ -58,8 +56,8 @@ type
     protected
      function  GetDim: integer; virtual; abstract;
      function  GetCount: integer; virtual; abstract;
-     function  GetPattern(i: integer): PPattern; virtual; abstract;
-     procedure SetPattern(i: integer; vl: PPattern); virtual; abstract;
+     function  GetPattern(i: integer): TData; virtual; abstract;
+     procedure SetPattern(i: integer; const vl: TData); virtual; abstract;
     protected
      procedure   Change; virtual;
     public
@@ -69,17 +67,18 @@ type
     public
      property Dim  : integer read GetDim;
      property Count: integer read GetCount;
-     property Pattern[i: integer]: PPattern read GetPattern write SetPattern; default;
+     property Pattern[i: integer]: TData read GetPattern write SetPattern; default;
      property ChangeListener: TListenerList read FChangeListener;
     published
      property Desc : string read FDesc write FDesc;
      property OnChange: TNotifyEvent read FOnChange write FOnChange;
   end;
 
+type
   TDataList = class(TDataPicker)
     private
      FDim: integer;
-     Data: TList;
+     Data: array of TData;
      FRawMode: boolean;
      FullSave: boolean;
      procedure FreeData;
@@ -88,8 +87,8 @@ type
      function  GetCount: integer; override;
      procedure SetDim(vl: integer); virtual;
      procedure SetCount(vl: integer); virtual;
-     function  GetPattern(i: integer): PPattern; override;
-     procedure SetPattern(i: integer; vl: PPattern); override;
+     function  GetPattern(i: integer): TData; override;
+     procedure SetPattern(i: integer; const vl: TData); override;
      procedure DefineProperties(Filer: TFiler); override;
     public
      constructor Create(AOwner: TComponent); override;
@@ -101,8 +100,8 @@ type
      procedure   LoadFromStream(S: TStream); virtual;
      procedure   SaveToWriter(W: TWriter); virtual;
      procedure   LoadFromReader(R: TReader); virtual;
-     procedure   Add(Ptn: PPattern); virtual;
-     procedure   Insert(i: integer; Ptn: PPattern); virtual;
+     procedure   Add(const Ptn: TData); virtual;
+     procedure   Insert(i: integer; const Ptn: TData); virtual;
      procedure   Delete(i: integer); virtual;
      destructor  Destroy; override;
     published
@@ -110,6 +109,9 @@ type
      property Count: integer read GetCount write SetCount;
      property RawMode: boolean read FRawMode write FRawMode default true;
   end;
+
+type
+  TPatternKind = (pkInput, pkOutput);
 
   TDataPattern = class(TDataList)
     private
@@ -135,50 +137,28 @@ type
      property AutoLoad   : boolean read FAutoLoad write SetAutoLoad;
   end;
 
-function  AllocPattern(Dim: integer): PPattern;
-function  ReallocPattern(pt: PPattern; OldDim, NewDim: integer): PPattern;
-procedure DisposePattern(pt: PPattern);
+procedure LoadPattern(const Path: string; var iP, oP: TDataList);
+function  FindPosMax(const p: TData): integer;
+
+//Computes Sum of Error squares, and sqr(Max) component error
+//@param N  Number of elements
+//@param YC Estimated vector
+//@param Y  Output vector
+//@returns sum(YC-Y)^2
+function  SumSqr(N: integer; const YC, Y: TData): double;
+
+//Computes Sum of Error squares, and sqr(Max) component error
+//@param Number of elements
+//@param Estimated vector
+//@param Output vector
+//@param Sum of error squares
+//@param Max squares erorr
+procedure SumSqrMax(N: integer; const YC, Y: TData; var Sum, Max: double);
+
 
 procedure Register;
 
 implementation
-
-type
-  PByte = ^byte;
-
-
-function AllocPattern(Dim: integer): PPattern;
-begin
-  Result:= nil;
-  if Dim <> 0 then begin
-    Dim:= Dim*SizeOf(double);
-    ReallocMem(Result, Dim);
-    FillChar(Result^, Dim, 0);
-  end;
-end;
-
-function ReallocPattern(Pt: PPattern; OldDim, NewDim: integer): PPattern;
-var
-  p: PByte;
-begin
-  NewDim:= NewDim*SizeOf(double);
-  OldDim:= OldDim*SizeOf(double);
-  if NewDim < OldDim then begin
-    ReallocMem(Pt, NewDim);
-  end
-  else begin
-    ReallocMem(Pt, NewDim);
-    p:= PByte(Pt);
-    inc(p, OldDim);
-    FillChar(p^, NewDim-OldDim, 0); 
-  end;
-  Result:= Pt;
-end;
-
-procedure DisposePattern(pt: PPattern);
-begin
-  ReallocMem(Pt, 0);
-end;
 
 constructor TListener.Create(aProc: TNotifyEvent);
 begin
@@ -251,7 +231,7 @@ constructor TDataList.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FDim:= 0;
-  Data:= TList.Create;
+  setLength(Data, FDim);
   FRawMode:= true;
   FullSave:= true;
 end;
@@ -266,8 +246,8 @@ var
   i: integer;
 begin
   if vl <> FDim then begin
-    for i:= 0 to Data.Count-1 do begin
-      Data[i]:= ReallocPattern(Data[i], FDim, vl);
+    for i:= Low(Data) to High(Data) do begin
+      SetLength(Data[i], vl);
     end;
     FDim:= vl;
     Change;
@@ -276,35 +256,34 @@ end;
 
 function  TDataList.GetCount: integer;
 begin
-  Result:= Data.Count;
+  Result:= High(Data)-Low(data)+1;
 end;
 
 procedure TDataList.SetCount(vl: integer);
 var
   i: integer;
+  N: integer;
 begin
-  if vl < Data.Count then begin
-    for i:= Data.Count-1 downto vl do begin
-      Delete(i);
-    end;
-    Change;
-  end
-  else if vl > Data.Count then begin
-    for i:= Data.Count to vl-1 do begin
-      Add(AllocPattern(Dim));
+  N:= GetCount;
+  if (vl<>N) then begin
+    SetLength(Data, vl);
+    if vl > N then begin
+      for i:= N to vl-1 do begin
+        SetLength(Data[i], Dim);
+      end;
     end;
     Change;
   end;
 end;
 
-function  TDataList.GetPattern(i: integer): PPattern;
+function  TDataList.GetPattern(i: integer): TData;
 begin
-  Result:= PPattern(Data[i]);
+  Result:= Data[i];
 end;
 
-procedure TDataList.SetPattern(i: integer; vl: PPattern);
+procedure TDataList.SetPattern(i: integer; const vl: TData);
 begin
-  Move(PPattern(Data[i])^, vl^, FDim*SizeOf(double));
+  Data[i]:= vl;
 end;
 
 procedure TDataList.SetUp(aDim: integer; aCount: integer);
@@ -315,7 +294,7 @@ end;
 
 procedure TDataList.SaveToStream(S: TStream);
 var
-  i, tmp: integer;
+  i, j, tmp: integer;
 begin
   if FullSave then begin
     tmp:= Count;
@@ -328,14 +307,16 @@ begin
   end;
   if (Dim>0) and (Count>0) then begin
     for i:= 0 to Count-1 do begin
-      S.Write(Data[i]^, Dim * SizeOf(double));
+      for j:= 0 to Dim-1 do begin
+        S.Write(Data[i][j], SizeOf(double));
+      end;
     end;
   end;
 end;
 
 procedure TDataList.LoadFromStream(S: TStream);
 var
-  i, tmp: integer;
+  i, j, tmp: integer;
 begin
   if FullSave then begin
     S.Read(tmp, SizeOf(tmp)); Dim:= tmp;
@@ -347,7 +328,9 @@ begin
   end;
   if (Dim>0) and (Count>0) then begin
     for i:= 0 to Count-1 do begin
-      S.Read(Data[i]^, Dim * SizeOf(double));
+      for j:= 0 to Dim-1 do begin
+        S.Read(Data[i][j], SizeOf(double));
+      end;
     end;
   end;
 end;
@@ -355,7 +338,6 @@ end;
 procedure TDataList.SaveToWriter(W: TWriter);
 var
   i, j: integer;
-  P: PPattern;
 begin
   if FullSave then begin
     W.WriteListBegin;
@@ -366,10 +348,9 @@ begin
   end;
   W.WriteListBegin;
   for i:= 0 to Count-1 do begin
-    P:= Data[i];
     W.WriteListBegin;
     for j:= 0 to Dim-1 do begin
-      W.WriteFloat(P^[j]);
+      W.WriteFloat(Data[i][j]);
     end;
     W.WriteListEnd;
   end;
@@ -382,7 +363,6 @@ end;
 procedure TDataList.LoadFromReader(R: TReader);
 var
   i, j: integer;
-  P: PPattern;
 begin
   if FullSave then begin
     R.ReadListBegin;
@@ -393,10 +373,9 @@ begin
   end;
   R.ReadListBegin;
   for i:= 0 to Count-1 do begin
-    P:= Data[i];
     R.ReadListBegin;
     for j:= 0 to Dim-1 do begin
-      P^[j]:= R.ReadFloat;
+      Data[i][j]:= R.ReadFloat;
     end;
     R.ReadListEnd;
   end;
@@ -410,7 +389,6 @@ procedure TDataList.SaveToFile(const OutPath: string);
 var
   f: text;
   i, j: integer;
-  pp: PPattern;
 begin
   AssignFile(f, OutPath);
   ReWrite(f);
@@ -419,8 +397,7 @@ begin
       Writeln(f, Desc);
       Writeln(f, Count, ' ',Dim);
       for i:= 0 to Count-1 do begin
-        pp:= Pattern[i];
-        for j:= 0 to Dim-1 do Write(f, FloatToStr(pp^[j]),' ');
+        for j:= 0 to Dim-1 do Write(f, FloatToStr(Pattern[i][j]),' ');
         Writeln(f);
       end;
     finally
@@ -436,7 +413,6 @@ procedure TDataList.LoadFromFile(const InPath: string);
 var
   f: text;
   i, j: integer;
-  pp: PPattern;
   aDesc: string;
   aCount, aDim: integer;
 begin
@@ -449,8 +425,7 @@ begin
     Dim  := aDim;
     Count:= aCount;
     for i:= 0 to Count-1 do begin
-      pp:= Pattern[i];
-      for j:= 0 to Dim-1 do Read(f, pp^[j]);
+      for j:= 0 to Dim-1 do Read(f, Pattern[i][j]);
       readln(f);
     end;
   finally
@@ -477,7 +452,6 @@ end;
 procedure TDataList.Assign(Source: TPersistent);
 var
   DL: TDataList;
-  pi, po: PPattern;
   i: integer;
 begin
   if Source is TDataList then begin
@@ -487,44 +461,57 @@ begin
     Desc:= DL.Desc;
     RawMode:= DL.RawMode;
     for i:= 0 to Count-1 do begin
-      pi:= DL.Data[i];
-      po:=    Data[i];
-      Move(pi^, po^, Dim*SizeOf(double));
+      Data[i]:= DL.Data[i];
     end;
   end
   else inherited Assign(Source);
 end;
 
-procedure TDataList.Add(Ptn: PPattern);
+procedure TDataList.Add(const Ptn: TData);
+var
+  N: integer;
 begin
-  Data.Add(Ptn);
+  N:= SizeOf(data);
+  SetLength(Data, N+1);
+  Data[N]:= Ptn;
 end;
 
-procedure TDataList.Insert(i: integer; Ptn: PPattern); 
+procedure TDataList.Insert(i: integer; const Ptn: TData);
+var
+  p, N: integer;
 begin
-  Data.Insert(i, Ptn);
+  N:= SizeOf(data);
+  SetLength(Data, N+1);
+  for p:= N-1 downto i do begin
+    Data[p+1]:= Data[p];
+  end;
+  Data[i]:= Ptn;
 end;
 
 procedure TDataList.Delete(i: integer);
+var
+  p, N: integer;
 begin
-  DisposePattern(PPattern(Data[i]));
-  Data.Delete(i);
+  N:= SizeOf(data);
+  for p:= i to N-2  do begin
+    Data[p]:= Data[p+1];
+  end;
+  SetLength(Data, N-1);
 end;
 
 procedure TDataList.FreeData;
 var
   i: integer;
 begin
-  for i:= Data.Count-1 downto 0 do begin
-    DisposePattern(PPattern(Data[i]));
-    Data.Delete(i);
+  for i:= High(Data) downto Low(Data) do begin
+    SetLength(Data[i], 0);
   end;
+  SetLength(Data, 0);
 end;
 
 destructor  TDataList.Destroy;
 begin
   FreeData;
-  Data.Free;
   inherited Destroy;
 end;
 
@@ -577,7 +564,6 @@ var
   tmps: string;
   NP, InDim, OutDim: integer;
   i, j: integer;
-  pp: PPattern;
   tmp: double;
 begin
   AssignFile(f, FileName);
@@ -594,8 +580,7 @@ begin
     for i:= 0 to np-1 do begin
       if InDim > 0 then begin
         if PatternKind = pkInput then begin
-          pp:= Pattern[i];
-          for j:= 0 to InDim-1 do Read(f, pp^[j]);
+          for j:= 0 to InDim-1 do Read(f, Pattern[i][j]);
         end
         else begin
           for j:= 0 to InDim-1 do Read(f, tmp);
@@ -603,8 +588,7 @@ begin
       end;
       if OutDim > 0 then begin
         if PatternKind = pkOutput then begin
-          pp:= Pattern[i];
-          for j:= 0 to OutDim-1 do Read(f, pp^[j]);
+          for j:= 0 to OutDim-1 do Read(f, Pattern[i][j]);
         end
         else begin
           for j:= 0 to OutDim-1 do Read(f, tmp);
@@ -622,6 +606,78 @@ destructor TDataPattern.Destroy;
 begin
   FLoadListener.Free;
   inherited Destroy;
+end;
+
+procedure LoadPattern(const Path: string; var iP, oP: TDataList);
+var
+  f: text;
+  i, j: integer;
+  pp: TData;
+  aDesc: string;
+  aCount, iDim, oDim: integer;
+begin
+  AssignFile(f, Path);
+  Reset(f);
+  try
+    Readln(f, aDesc);
+    Readln(f, aCount, iDim, oDim);
+    ip:= TDataList.Create(nil);
+    ip.Desc:= aDesc;
+    ip.Dim:= iDim;
+    ip.Count:= aCount;
+    op:= TDataList.Create(nil);
+    op.Desc:= aDesc;
+    op.Dim:= oDim;
+    op.Count:= aCount;
+    for i:= 0 to aCount-1 do begin
+      pp:= ip.Pattern[i];
+      for j:= 0 to iDim-1 do Read(f, pp[j]);
+      pp:= op.Pattern[i];
+      for j:= 0 to oDim-1 do Read(f, pp[j]);
+      readln(f);
+    end;
+  finally
+    CloseFile(f);
+  end;
+end;
+
+function FindPosMax(const p: TData): integer;
+var
+  mx: double;
+  i: integer;
+begin
+  Result:= 0;
+  mx:= p[0];
+  for i := 1 to High(p) do begin
+    if (p[i]>mx) then begin
+      Result:= i;
+      mx:= p[i];
+    end;
+  end;
+end;
+
+function SumSqr(N: integer; const YC, Y: TData): double;
+var
+  I: integer;
+begin
+  Result:= 0.0;
+  for I:= 0 to N-1 do begin
+    Result:= Result + sqr((YC[I]-Y[I]));
+  end;
+end;
+
+procedure SumSqrMax(N: integer; const YC, Y: TData; var Sum, Max: double);
+var
+  I: integer;
+  tmp: double;
+begin
+  Sum:= 0.0;
+  Max:= 0.0;
+  for I:= 0 to N-1 do begin
+    tmp:= sqr((YC[I]-Y[I]));
+    Sum:= Sum + tmp;
+    if tmp > Max then Max:= tmp;
+  end;
 end;
 
 procedure Register;
