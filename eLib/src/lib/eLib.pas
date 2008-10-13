@@ -82,35 +82,40 @@ const
 
 type
   Encoding = class
-    class function HexDecode(src: string): string; static;
-    class function HexEncode(const src: string): string; static;
+    public
+     class function HexDecode(src: string): string; static;
+     class function HexEncode(const src: string): string; static;
   end;
 
 type
   Parser = class
-    class function DVal(s: string): double; static;
-    class function IVal(const s: string): integer; static;
+    public
+     class function DVal(s: string): double; static;
+     class function IVal(const s: string): integer; static;
   end;
 
 type
   CRC = class
-    class function  CalcCRC(const buf: array of byte): integer;
-    class procedure UpdateCRC(var CRC: integer; const buf: array of byte; from: integer = -1; size: integer = -1);
+    public
+     class function  CalcCRC(const buf: array of byte): integer;
+     class procedure UpdateCRC(var CRC: integer; const buf: array of byte; from: integer = -1; size: integer = -1);
   end;
 
 type
   Crypt = class
-    class function SimpleCrypt(const msg, key: string): string; static;
-    class function SimpleDecrypt(const msg, key: string): string; static;
+    public
+     class function SimpleCrypt(const msg, key: string): string; static;
+     class function SimpleDecrypt(const msg, key: string): string; static;
   end;
 
 type
   StrUtil = class
-    class function RemoveSpace(const inStr: string): string; static;
-    class function ShiftWord(var s: string; const separator: string): string; static;
-    class function TabToSpace(const s: string; const tab: string): string; static;
-    class function Chars(n: integer; ch: char = ' '): string; static;
-    class function OutFloat(x: double; l, d: integer): string; static;
+    public
+     class function RemoveSpace(const inStr: string): string; static;
+     class function ShiftWord(var s: string; const separator: string): string; static;
+     class function TabToSpace(const s: string; const tab: string): string; static;
+     class function Chars(n: integer; ch: char = ' '): string; static;
+     class function OutFloat(x: double; l, d: integer): string; static;
   end;
 
 const
@@ -118,15 +123,16 @@ const
 
 type
   DateUtil = class
-    class procedure SetLongYear; static;
-    class function  DateToYMD(aDate: TDateTime; time: boolean): string; static;
-    class function  YMDToDate(const YMD: string; time: boolean): TDateTime; static;
-    class function  AddWorkDay(aDate: TDateTime; dd: integer): TDateTime; static;
-    class function  IsNotWorkDay(aDate: TDateTime): boolean; static;
-    class function  GetTimeLen(const duration: string): TDateTime; static;
-    class function  MyStrToDate(aDate: string): TDateTime; static;
-    class function  MyDateToStr(aDate: TDateTime): string; static;
-    class function  ChangeDay(aDate: TDateTime; newY: word; newM: word; newD: word): TDateTime; static;
+    public
+     class procedure SetLongYear; static;
+     class function  DateToYMD(aDate: TDateTime; time: boolean): string; static;
+     class function  YMDToDate(const YMD: string; time: boolean): TDateTime; static;
+     class function  AddWorkDay(aDate: TDateTime; dd: integer): TDateTime; static;
+     class function  IsNotWorkDay(aDate: TDateTime): boolean; static;
+     class function  GetTimeLen(const duration: string): TDateTime; static;
+     class function  MyStrToDate(aDate: string): TDateTime; static;
+     class function  MyDateToStr(aDate: TDateTime): string; static;
+     class function  ChangeDay(aDate: TDateTime; newY: word; newM: word; newD: word): TDateTime; static;
   end;
 
 type
@@ -296,6 +302,9 @@ type
     procedure SetMask(aMask: string);
     function  DirChange: boolean; virtual;
     function  ProcessFile(const SRec: TSearchRec): boolean; virtual;
+   public
+    constructor Create(AOwner: TComponent); override;
+    procedure Scan; virtual;
    published
     property StartPath: string read FStartPath write FStartPath;
     property CurDir: string read FCurDir;
@@ -307,9 +316,6 @@ type
    published
     property OnDirChange  : TDirChangeEvent read FDirChange  write FDirChange;
     property OnProcessFile: TProcessFileEvent read FProcessFileEvent write FProcessFileEvent;
-   public
-    constructor Create(AOwner: TComponent); override;
-    procedure Scan; virtual;
   end;
 
   TFiles = class(TList)
@@ -332,26 +338,27 @@ type
      NeedClose: boolean;
      FileName: string;
     public
-      constructor Create(AFileName: string);
-      procedure   writeln(cmd: string);
-      destructor  Destroy; override;
+     constructor Create(AFileName: string);
+     procedure   writeln(cmd: string);
+     destructor  Destroy; override;
   end;
 
   FileUtil = class
-    class procedure DeleteFile(Path: string); static;
-    class function  GetTempDir: string; static;
-    class function  GetUniqueName(const Mask: string): string; static;
-    class procedure FindRecursive(const path: string; const mask: string; LogFunction: TLogFunc); static;
-    class function ExtractFileNameWithoutExt(const FullPath: string): string; static;
-    class function Compare(const FE1, FE2: string): boolean; static;
-    class function CalcCRC(const FileName: string): integer; static;
-    class function GetFileSize(const FileName: string): integer; static;
-    class function isSystemAliasDirectory(const Name: string): boolean; static;
-    class procedure DeleteFiles(sMask: string); static;
-    class procedure Open(var f: text; Nam: string);
-    class procedure FGetStr(var f: text; var x: string);
-    class procedure FGetInt(var f: text; var x: integer);
-    class procedure FGetDouble(var f: text; var x: double);
+    public
+     class procedure DeleteFile(Path: string); static;
+     class function  GetTempDir: string; static;
+     class function  GetUniqueName(const Mask: string): string; static;
+     class procedure FindRecursive(const path: string; const mask: string; LogFunction: TLogFunc); static;
+     class function  ExtractFileNameWithoutExt(const FullPath: string): string; static;
+     class function  Compare(const FE1, FE2: string): boolean; static;
+     class function  CalcCRC(const FileName: string): integer; static;
+     class function  GetFileSize(const FileName: string): integer; static;
+     class function  isSystemAliasDirectory(const Name: string): boolean; static;
+     class procedure DeleteFiles(sMask: string); static;
+     class procedure Open(var f: text; Nam: string);
+     class procedure FGetStr(var f: text; var x: string);
+     class procedure FGetInt(var f: text; var x: integer);
+     class procedure FGetDouble(var f: text; var x: double);
   end;
 
 function _sortByName(Item1, Item2: Pointer): Integer;
@@ -391,12 +398,13 @@ type
 
 type
   ShellUtil = class
-    class function  GetToken(NumCmd: integer; const Cmds: array of TCmd; CmdStr: string; defCmnd: integer; Flg: boolean): integer;
-    class procedure SplitStr(var Raw, Cmd, prm: string);
-    class function  GetParm(var prm: string; opr: integer): string;
-    class procedure SplitArg(ArgStr: string; var Args: TArg; const FS: TCharSet; const Cmt: TCharSet);
-    class function  IsAlias(wht: string; NumAlias: integer; var Alias: array of TAlias; Flg: boolean): integer;
-    class procedure ExpandAlias(var Arg: TArg; NumAlias: integer; var Alias: array of TAlias);
+    public
+     class function  GetToken(NumCmd: integer; const Cmds: array of TCmd; CmdStr: string; defCmnd: integer; Flg: boolean): integer;
+     class procedure SplitStr(var Raw, Cmd, prm: string);
+     class function  GetParm(var prm: string; opr: integer): string;
+     class procedure SplitArg(ArgStr: string; var Args: TArg; const FS: TCharSet; const Cmt: TCharSet);
+     class function  IsAlias(wht: string; NumAlias: integer; var Alias: array of TAlias; Flg: boolean): integer;
+     class procedure ExpandAlias(var Arg: TArg; NumAlias: integer; var Alias: array of TAlias);
   end;
 
 type
