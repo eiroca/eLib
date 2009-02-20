@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 (*
  @author(Enrico Croce)
 *)
-unit FAbout;
+unit FAboutGPL;
 
 interface
 
@@ -34,13 +34,13 @@ type
     { Public declarations }
   end;
 
-procedure About(me: string);
+procedure AboutGPL(me: string);
 
 implementation
 
 {$R *.dfm}
 
-procedure About(me: string);
+procedure AboutGPL(me: string);
 var
   fmAbout: TfmAbout;
 begin

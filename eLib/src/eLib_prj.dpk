@@ -42,6 +42,6 @@ contains
   eLibBDE in 'lib\eLibBDE.pas',
   eLibVCL in 'lib\eLibVCL.pas',
   eWait in 'lib\eWait.pas',
-  FAbout in 'lib\FAbout.pas';
+  FAboutGPL in 'lib\FAboutGPL.pas';
 
 end.
