@@ -33,7 +33,7 @@ requires
 contains
   eLib in 'lib\eLib.pas',
   eRX in 'lib\eRX.pas',
-  eLibMath in 'lib\eLibMath.pas',
+  eLibStat in 'lib\eLibStat.pas',
   eHashList in 'lib\eHashList.pas',
   eLibComplex in 'lib\eLibComplex.pas',
   eLibSystem in 'lib\eLibSystem.pas',
@@ -42,6 +42,7 @@ contains
   eLibBDE in 'lib\eLibBDE.pas',
   eLibVCL in 'lib\eLibVCL.pas',
   eWait in 'lib\eWait.pas',
-  FAboutGPL in 'lib\FAboutGPL.pas';
+  FAboutGPL in 'lib\FAboutGPL.pas',
+  eLibMath in 'lib\eLibMath.pas';
 
 end.

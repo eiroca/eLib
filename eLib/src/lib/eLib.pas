@@ -699,7 +699,7 @@ var
   tmp: string;
   s: integer;
 begin
-  tmp:= FloatToStrF(x, ffFixed, l,d);
+  tmp:= FloatToStrF(x, ffFixed, l, d);
   s:= l - length(tmp);
   if s>0 then begin
     Result:= Copy('                      ',1,s)+tmp;
