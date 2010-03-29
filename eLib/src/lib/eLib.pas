@@ -343,6 +343,10 @@ type
      destructor  Destroy; override;
   end;
 
+const
+  FILEBUFFERSIZE = 128*1024;
+
+type
   FileUtil = class
     public
      class procedure DeleteFile(Path: string); static;
@@ -351,7 +355,7 @@ type
      class procedure FindRecursive(const path: string; const mask: string; LogFunction: TLogFunc); static;
      class function  ExtractFileNameWithoutExt(const FullPath: string): string; static;
      class function  Compare(const FE1, FE2: string): boolean; static;
-     class function  CalcCRC(const FileName: string): integer; static;
+     class function  CalcCRC(const FileName: string; maxSize: integer = -1): integer; static;
      class function  GetFileSize(const FileName: string): integer; static;
      class function  isSystemAliasDirectory(const Name: string): boolean; static;
      class procedure DeleteFiles(sMask: string); static;
@@ -1514,7 +1518,7 @@ begin
   else Result:= true;
 end;
 
-function TDirScan.ProcessFile(const SRec: TSearchRec): boolean; 
+function TDirScan.ProcessFile(const SRec: TSearchRec): boolean;
 begin
   if Assigned(FProcessFileEvent) then Result:= FProcessFileEvent(Self, SRec)
   else Result:= true;
@@ -1584,43 +1588,48 @@ begin
   else GetFileSize:= -1;
 end;
 
-class function FileUtil.CalcCRC(const FileName: string): integer;
-const
-  BUF_SIZE = 32*1024;
+class function FileUtil.CalcCRC(const FileName: string; maxSize: integer = -1): integer;
 type
-  TBuf = array[0..BUF_SIZE-1] of byte;
+  TBuf = array[0..FILEBUFFERSIZE-1] of byte;
   PBuf = ^TBuf;
 var
   f: file;
-  Buf: PBuf;
-  Siz: integer;
-  OldFileMode: integer;
+  buf: PBuf;
+  siz: integer;
+  oldFileMode: integer;
 begin
   Result:= 0;
-  New(Buf);
+  New(buf);
   AssignFile(f, FileName);
-  OldFileMode:= FileMode;
+  oldFileMode:= FileMode;
   FileMode := 0;  { Set file access to read only }
-  reset(f, 1);
+  Reset(f, 1);
   repeat
-    FillChar(Buf^, SizeOf(TBuf), 0);
-    blockread(f, Buf^, SizeOf(TBuf), Siz);
-    if (Siz > 0) then begin
-      CRC.UpdateCRC(Result, Buf^, Siz);
+    BlockRead(f, buf^, SizeOf(TBuf), siz);
+    if (siz > 0) then begin
+      if (maxSize >= 0) then begin
+        if (siz > maxSize) then begin
+          siz:= maxSize;
+        end;
+        if (siz > 0) then begin
+          CRC.UpdateCRC(Result, buf^, siz);
+        end;
+        dec(maxSize, siz);
+      end
+      else begin
+        CRC.UpdateCRC(Result, buf^, siz);
+      end;
     end;
-  until (Siz=0);
+  until (siz=0) or (maxSize=0);
   CloseFile(f);
   Dispose(Buf);
   FileMode:= OldFileMode;
 end;
 
 class function FileUtil.Compare(const FE1, FE2: string): boolean;
-const
-  BUF_SIZE = 32*1024 div SizeOf(integer);
 type
-  TBuf = array[0..BUF_SIZE-1] of integer;
+  TBuf = array[0..(FILEBUFFERSIZE div SizeOf(integer))-1] of integer;
   PBuf = ^TBuf;
-  PByte = ^byte;
 var
   f1, f2: file;
   FS1, FS2: integer;
@@ -1628,6 +1637,7 @@ var
   Buf2: PBuf;
   Siz1: integer;
   Siz2: integer;
+  Siz: integer;
   i: integer;
   OldFileMode: integer;
 begin
@@ -1641,20 +1651,23 @@ begin
   AssignFile(f2, FE2);
   OldFileMode:= FileMode;
   FileMode := 0;  { Set file access to read only }
-  reset(f1, 1);
-  reset(f2, 1);
+  Reset(f1, 1);
+  Reset(f2, 1);
   Result:= true;
   repeat
     FillChar(Buf1^, SizeOf(TBuf), 0);
-    blockread(f1, Buf1^, SizeOf(TBuf), Siz1);
     FillChar(Buf2^, SizeOf(TBuf), 0);
-    blockread(f2, Buf2^, SizeOf(TBuf), Siz2);
-    if (Siz1<>Siz2) then begin
-      Result:= false;
-      break;
+    BlockRead(f1, Buf1^, SizeOf(TBuf), Siz1);
+    BlockRead(f2, Buf2^, SizeOf(TBuf), Siz2);
+    if (Siz1 <> Siz2) then begin
+      raise EReadError.Create('Error reading files');
     end;
     if (Siz1 > 0) then begin
-      for i:= 0 to BUF_SIZE-1 do begin
+      Siz:= Siz1 div SizeOf(integer);
+      if (Siz1 mod SizeOf(integer))>0 then begin
+        inc(Siz);
+      end;
+      for i:= 0 to Siz-1 do begin
         if Buf1^[i]<>Buf2^[i] then begin
           Result:= false;
           break;
