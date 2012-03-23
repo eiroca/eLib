@@ -1,4 +1,4 @@
-program eLibTests;
+program eLib_Tests;
 {
 
   Delphi DUnit Test Project

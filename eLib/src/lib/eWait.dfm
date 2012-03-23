@@ -24,9 +24,10 @@ object fmWait: TfmWait
     Top = 40
     Width = 75
     Height = 25
+    Kind = bkAbort
+    NumGlyphs = 2
     TabOrder = 0
     OnClick = BitBtn1Click
-    Kind = bkAbort
   end
   object PB: TProgressBar
     Left = 8

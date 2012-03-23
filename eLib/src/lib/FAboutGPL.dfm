@@ -41,7 +41,8 @@ object fmAbout: TfmAbout
     Top = 207
     Width = 70
     Height = 25
-    TabOrder = 0
     Kind = bkOK
+    NumGlyphs = 2
+    TabOrder = 0
   end
 end

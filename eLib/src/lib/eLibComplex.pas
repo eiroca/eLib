@@ -24,7 +24,7 @@ unit eLibComplex;
 interface
 
 uses
-  SysUtils, Classes, Math, eLib, eLibMath;
+  SysUtils, Classes, Math, eLibCore, eLibMath;
 
 type
   Polar = record

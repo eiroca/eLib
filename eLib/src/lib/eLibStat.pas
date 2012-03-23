@@ -22,7 +22,7 @@ unit eLibStat;
 interface
 
 uses
-  SysUtils, Classes, eLib, eHashList, eLibMath;
+  SysUtils, Classes, eLibCore, eHashList, eLibMath;
 
 type
   TIgnoreMode = (imNone, imLowerThan);

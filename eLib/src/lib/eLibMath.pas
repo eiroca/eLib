@@ -22,7 +22,7 @@ unit eLibMath;
 interface
 
 uses
-  SysUtils, Classes, eLib;
+  SysUtils, Classes, eLibCore;
 
 const
   cZERO  : double = 1E-20; (* Number that could be assumed like to Zero *)

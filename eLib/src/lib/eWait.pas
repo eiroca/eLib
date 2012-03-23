@@ -22,7 +22,7 @@ unit eWait;
 interface
 
 uses
-  eLib, SysUtils, Classes, Windows, Forms, ComCtrls, Controls, StdCtrls, Buttons;
+  eLibCore, SysUtils, Classes, Windows, Forms, ComCtrls, Controls, StdCtrls, Buttons;
 
 type
   TfmWait = class(TForm)

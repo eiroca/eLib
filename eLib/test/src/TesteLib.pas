@@ -3,7 +3,7 @@ unit TesteLib;
 interface
 
 uses
-  TestFramework, eLib, SysUtils;
+  TestFramework, eLibCore, SysUtils;
 type
   // Test methods for class Encoding
 
@@ -183,7 +183,7 @@ var
   d1: double;
   d2: double;
 begin
-  d1:= Parser.DVal(' '+CurrencyString+'1'+ThousandSeparator+'0 0 0 . 1 '+#9);
+  d1:= Parser.DVal(' '+FormatSettings.CurrencyString+'1'+FormatSettings.ThousandSeparator+'0 0 0 . 1 '+#9);
   d2:= Parser.DVal('1000.1');
   Check(d1 = d2);
 end;

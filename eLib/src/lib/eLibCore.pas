@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 (*
  @author(Enrico Croce)
 *)
-unit eLib;
+unit eLibCore;
 
 interface
 
@@ -25,7 +25,7 @@ uses
   SysUtils, Classes;
 
 type
-  TCharSet = set of char;
+  TCharSet = TSysCharSet;
 
 const
 
@@ -438,7 +438,7 @@ resourcestring
   sHexConvertErrorText = 'Wrong char';
 
 const
-  HexDigit: string[16] = '0123456789ABCDEF';
+  HexDigit: string = '0123456789ABCDEF';
 
 (*
   a sequence of Hex digits in a string.
@@ -498,12 +498,12 @@ var
   p: integer;
 begin
   s:= Trim(s);
-  p:= Pos(CurrencyString, s);
-  if p <> 0 then Delete(s, p, length(CurrencyString));
+  p:= Pos(FormatSettings.CurrencyString, s);
+  if p <> 0 then Delete(s, p, length(FormatSettings.CurrencyString));
   repeat
-    p:= Pos(ThousandSeparator, s);
+    p:= Pos(FormatSettings.ThousandSeparator, s);
     if p = 0 then break;
-    Delete(s, p, length(ThousandSeparator));
+    Delete(s, p, length(FormatSettings.ThousandSeparator));
   until false;
   repeat
     p:= Pos(' ', s);
@@ -727,12 +727,12 @@ class procedure DateUtil.SetLongYear;
 var
   ps: integer;
 begin
-  if Pos('yyyy', ShortDateFormat) = 0 then begin
-    ps:= Pos('yy', ShortDateFormat);
-    if ps = 0 then ShortDateFormat:= 'dd/mm/yyyy'
+  if Pos('yyyy', FormatSettings.ShortDateFormat) = 0 then begin
+    ps:= Pos('yy', FormatSettings.ShortDateFormat);
+    if ps = 0 then FormatSettings.ShortDateFormat:= 'dd/mm/yyyy'
     else begin
-      Delete(ShortDateFormat, ps, 2);
-      Insert('yyyy', ShortDateFormat, ps);
+      Delete(FormatSettings.ShortDateFormat, ps, 2);
+      Insert('yyyy', FormatSettings.ShortDateFormat, ps);
     end;
   end;
 end;
@@ -1038,13 +1038,13 @@ begin
     while (i <= length(row)) do begin
       ch:= row[i];
       if (esc=#0) then begin
-        if ch in FieldSep then begin
+        if CharInSet(ch, FieldSep) then begin
           Fld.Add(copy(row,inz,len));
           inz:= i+1;
           len:= 0;
         end
         else begin
-          if (ch in Escape) then begin
+          if CharInSet(ch, Escape) then begin
             esc:= ch;
           end
           else begin
@@ -1092,11 +1092,11 @@ begin
       repeat
         repeat
           ch:= GetChar(src);
-        until not (ch in LineSep);
+        until not CharInSet(ch, LineSep);
         row:= ch;
         repeat
           ch:= GetChar(src);
-          if not (ch in LineSep) then begin
+          if not CharInSet(ch, LineSep) then begin
             row:= row + ch;
           end
           else begin
@@ -1818,7 +1818,7 @@ begin
     if eof(F) then break;
     Readln(f, tmp);
     tmp:= trim(tmp);
-  until (tmp<>'') and not(tmp[1] in Comment);
+  until (tmp<>'') and not CharInSet(tmp[1], Comment);
   x:= tmp;
 end;
 
@@ -1906,9 +1906,9 @@ begin
     Arg0:= ArgStr;
     ArgStr:= Trim(ArgStr);
     if (ArgStr='') then exit;
-    if (ArgStr[1] in Cmt) then exit;
+    if CharInSet(ArgStr[1], Cmt) then exit;
     for idx:= 1 to length (ArgStr) do
-      if ArgStr[idx] in FS then ArgStr[idx]:= ' '; (* forza lo spazio come separatore *)
+      if CharInSet(ArgStr[idx], FS) then ArgStr[idx]:= ' '; (* forza lo spazio come separatore *)
     idx:= 1;
     while ArgStr <> '' do begin
       ps:= Pos(' ', ArgStr);
@@ -1992,7 +1992,7 @@ begin
   if multFS then fsep:= ' ' { special case: multiple blanks treated as one!}
   else begin
     if (FieldSep[1] = '^') and (length(FieldSep) > 1) then begin
-      if FieldSep[2] in ['A'..'[', 'a'..'z'] then fsep:= chr(ord(FieldSep[2]) - 64) { standard control character}
+      if CharInSet(FieldSep[2], ['A'..'[', 'a'..'z']) then fsep:= chr(ord(FieldSep[2]) - 64) { standard control character}
       else if FieldSep[2] = '^' then fsep:= '^' { literal ^}
       else fsep:= '^'; { don't know what else to do... could raise an exception i suppose, but...}
     end

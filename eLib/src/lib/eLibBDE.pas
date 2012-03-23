@@ -52,7 +52,7 @@ procedure DefTable(var TableDesc: CRTblDesc; const sName,sType,sPassword: string
 implementation
 
 uses
-  SysUtils, eLib;
+  SysUtils, eLibCore;
 
 procedure DeleteAuxFiles(const szDirectory, szTblName, szTblType: string);
 var
