@@ -138,7 +138,7 @@ procedure Register;
 implementation
 
 uses
-  eLib, eCompUtil;
+  eLibCore, eCompUtil;
 
 constructor TeDataBase.Create(AOwner: TComponent);
 begin

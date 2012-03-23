@@ -118,7 +118,7 @@ interface
 
 uses
   SysUtils, Windows, Messages, Classes, Graphics, Controls,
-  Forms, Dialogs, Grids, DB, DBTables, eCompUtil, eLib;
+  Forms, Dialogs, Grids, DB, DBTables, eCompUtil, eLibCore;
 
 {constants for array sizes}
 const

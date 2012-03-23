@@ -6,6 +6,7 @@ package eComp;
 {$R 'lib\eDB.dcr'}
 {$R 'lib\eGauge.dcr'}
 {$R 'lib\eReport.dcr'}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
@@ -27,6 +28,8 @@ package eComp;
 {$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
+{$ENDIF IMPLICITBUILDING}
+{$LIBSUFFIX '160'}
 {$IMPLICITBUILD OFF}
 
 requires
@@ -37,8 +40,7 @@ requires
   vclactnband,
   vclx,
   dbrtl,
-  bdertl,
-  eLib_prj;
+  bdertl;
 
 contains
   eSillaba in 'lib\eSillaba.pas',

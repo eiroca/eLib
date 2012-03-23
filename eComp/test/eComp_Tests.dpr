@@ -1,4 +1,4 @@
-program eCompTests;
+program eComp_Tests;
 {
 
   Delphi DUnit Test Project

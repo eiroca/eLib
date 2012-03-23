@@ -9,7 +9,7 @@ interface
 
 uses
   SysUtils, Classes, Windows, Messages, Controls, Graphics,
-  eLib, eCompUtil;
+  eLibCore, eCompUtil;
 
 type
 
