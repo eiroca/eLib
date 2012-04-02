@@ -23,7 +23,7 @@ object fmAbout: TfmAbout
     Alignment = taCenter
     AutoSize = False
     Caption = 
-      'Copyright (C) 1996-2008 eIrOcA Enrico Croce && Simona Burzio'#13#13'Th' +
+      'Copyright (C) 1996-2012 eIrOcA Enrico Croce && Simona Burzio'#13#13'Th' +
       'is program is free software: you can redistribute it and/or modi' +
       'fy it under the terms of the GNU General Public License as publi' +
       'shed by the Free Software Foundation, either version 3 of the Li' +
