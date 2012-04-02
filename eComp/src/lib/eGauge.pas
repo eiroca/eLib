@@ -8,7 +8,7 @@ unit eGauge;
 interface
 
 uses
-  SysUtils, Classes, Windows, Messages, Controls, Graphics,
+  SysUtils, Types, Classes, Windows, Messages, Controls, Graphics,
   eLibCore, eCompUtil;
 
 type

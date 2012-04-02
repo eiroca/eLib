@@ -985,10 +985,6 @@ var
   tmp: string;
 begin
   if length(str) = 0 then tmp:= ''
-  else if length(str) = 1 then begin
-    SetLength(tmp, FPageW);
-    FillChar(tmp[1], FPageW, str[1]);
-  end
   else begin
     tmp:= str;
     while length(tmp) <= FPageW do tmp:= tmp + str;
