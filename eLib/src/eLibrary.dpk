@@ -48,7 +48,8 @@ contains
   eRX in 'lib\eRX.pas',
   eTAGExtractor in 'lib\eTAGExtractor.pas',
   FAboutGPL in 'lib\FAboutGPL.pas' {fmAbout},
-  eWait in 'lib\eWait.pas' {fmWait};
+  eWait in 'lib\eWait.pas' {fmWait},
+  eLibLegacy in 'lib\eLibLegacy.pas';
 
 end.
 

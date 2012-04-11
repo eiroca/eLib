@@ -116,6 +116,7 @@ type
      class function TabToSpace(const s: string; const tab: string): string; static;
      class function Chars(n: integer; ch: char = ' '): string; static;
      class function OutFloat(x: double; l, d: integer): string; static;
+     class function isLitteral(ch: char): boolean; static;
   end;
 
 const
@@ -281,7 +282,7 @@ type
     public
      Path: String;
      Size: integer;
-     Time: integer;
+     Time: TDateTime;
      TAG : integer;
     public
       constructor Create(const APath: string; SRec: TSearchRec);
@@ -381,17 +382,17 @@ const
 
 type
 
-  ArgStr = string[50];
+  ArgStr = string;
 
   TCmd = record
     Tokn: integer;
-    Name: string[10];
-    Parm: string[20];
+    Name: string;
+    Parm: string;
   end;
 
   TAlias = record
-    Name: string[20];
-    NewStr: string[20];
+    Name: string;
+    NewStr: string;
   end;
 
   TArg = record
@@ -429,6 +430,9 @@ type
   end;
 
 implementation
+
+uses
+  DateUtils;
 
 (*
 Encoding
@@ -710,6 +714,14 @@ begin
   end
   else begin
     Result:= tmp;
+  end;
+end;
+
+class function StrUtil.isLitteral;
+begin
+  Result:= false;
+  if (ch>#32) and (ch<#127) then begin
+    Result:= CharInSet(ch, ['A'..'Z','a'..'z','0'..'9','_']);
   end;
 end;
 
@@ -1396,16 +1408,14 @@ var
 begin
   FE1:= TFileElem(Item1);
   FE2:= TFileElem(Item2);
-       if (FE1.Time < FE2.Time) then Result:= -1
-  else if (FE1.Time > FE2.Time) then Result:=  1
-  else Result:= 0;
+  Result:= CompareDateTime(FE1.Time, FE2.Time);
 end;
 
 constructor TFileElem.Create(const APath: string; SRec: TSearchRec);
 begin
   Path:= APath;
   Size:= SRec.Size;
-  Time:= SRec.Time;
+  Time:= SRec.TimeStamp;
   TAG := 0;
 end;
 
