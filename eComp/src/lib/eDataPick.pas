@@ -183,6 +183,7 @@ begin
   with FListener do begin
     for i:= 0 to Count-1 do begin
       if (@TListener(Items[i]).Proc = @aProc) then begin
+        TListener(Items[i]).Free;
         Delete(i);
         Pack;
         break;
@@ -203,7 +204,12 @@ begin
 end;
 
 destructor TListenerList.Destroy;
+var
+  i: integer;
 begin
+  for i:= 0 to FListener.Count-1 do begin
+    TListener(FListener.Items[i]).Free;
+  end;
   FListener.Free;
   inherited Destroy;
 end;
