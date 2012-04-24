@@ -44,7 +44,7 @@ type
 
 type
 
-  TStatistic = class
+  TStatistic = class(TPersistent)
     private
      function getAverage: double;
      function getVariance: double;
@@ -57,6 +57,9 @@ type
      SumX2: double;
     public
      constructor Create;
+    public
+     procedure   Assign(Source: TPersistent); override;
+    public
      procedure Reset;
      procedure Update(x: double);
     public
@@ -108,6 +111,14 @@ type
      property Num   : integer read FNum;
   end;
 
+  (*
+     The following report is available through TErrorSet @br
+     i a value taken from I, n a value taken from N. @br
+     Total Absolute Error: Min, Max, Ave, Var of E[n, i] for all i, n @br
+     Total Relative Error: Min, Max, Ave, Var of Er[n, i] for all i, n @br
+     Total EQM Error: Min, Max, Ave, Var of D[n] for all n @br
+     Total Relative EQM Error: Min, Max, Ave, Var of Dr[n] for all n @br
+  *)
   TErrorSet = class(TComponent)
     private
      FIgnoreParam: double;
@@ -150,7 +161,7 @@ type
      glma: array[1..55] of double;
      class function rand(idum: integer): double; static;
     public
-     class function Val(Mode: TRandKind): double; static;
+     class function  Val(Mode: TRandKind): double; static;
      class procedure Init(idum: integer); static;
      class function  IRand(Mdl: integer): integer; static;
      class function  DRand: double; static;
@@ -249,6 +260,21 @@ constructor TStatistic.Create;
 begin
   Dsc:= '';
   Reset;
+end;
+
+procedure TStatistic.Assign(Source: TPersistent);
+var
+  S: TStatistic;
+begin
+  if Source is TStatistic then begin
+    S:= TStatistic(Source);
+    SumX:= S.SumX;
+    SumX2:= S.SumX2;
+    Max:= S.Max;
+    Min:= S.Min;
+    Num:= S.Num;
+  end
+  else inherited;
 end;
 
 procedure TStatistic.Reset;

@@ -33,8 +33,10 @@ type
   PDouble = ^double;
   PInteger = ^integer;
 
-  PDoubleArr  = ^TdoubleArr;  TDoubleArr  = array[0..999999] of double;
-  PIntegerArr = ^TintegerArr; TIntegerArr = array[0..999999] of integer;
+  PDoubleArr  = ^TdoubleArr;
+  TDoubleArr  = array of double;
+  PIntegerArr = ^TintegerArr;
+  TIntegerArr = array of integer;
 
 type
   TMatrix = class(TComponent)

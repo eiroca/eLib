@@ -42,6 +42,10 @@ implementation
 uses
   SysUtils, Dialogs;
 
+resourcestring
+  msgCheckAbort = 'Sei sicuro di voler abbandonare le modifiche?';
+
+
 class procedure DBUtil.SetEdit(ds: TDataSource);
 begin
   if not (ds.State in [dsEdit, dsInsert]) then begin
@@ -60,7 +64,7 @@ class function DBUtil.CheckAbort(ds: TDataSource): TModalResult;
 begin
   Result:= mrOk;
   if not (ds.State in [dsEdit, dsInsert]) then exit;
-  if MessageDlg('Sei sicuro di voler abbandonare le modifiche?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
+  if MessageDlg(msgCheckAbort, mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
     ds.DataSet.Cancel;
     exit;
   end;

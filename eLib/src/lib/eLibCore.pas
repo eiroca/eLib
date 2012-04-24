@@ -378,7 +378,7 @@ const
   DoUpCase  = 1;
   DoLoCase  = 2;
 
-  MaxArg= 30;
+  MaxArg = 30;
 
 type
 
@@ -427,6 +427,21 @@ type
      property FS: string read FieldSep write FieldSep;
      property NF: byte read NumFields;
      property Arg[n: byte]: string read GetArg; default;
+  end;
+
+type
+
+  TStorable = class(TComponent)
+    public
+     class function ComponentToString(Component: TComponent): string; static;
+     class function StringToComponent(Value: string): TComponent; static;
+     class function  CheckCreate(Instance: TComponent; ClassKind: TComponentClass; const Name: string = ''; const Owner: TComponent = nil): TComponent;
+    public
+      constructor Create(AOwner: TComponent); override;
+    public
+     function  Equals(Obj: TObject): Boolean; override;
+     procedure GetChildren(Proc: TGetChildProc; Root: TComponent); override;
+     function  GetChildOwner: TComponent; override;
   end;
 
 implementation
@@ -2050,6 +2065,110 @@ begin
   end;
   if index[0] > 0 then NumFields:= n + 1
   else NumFields:= 0
+end;
+
+class function TStorable.ComponentToString(Component: TComponent): string;
+var
+  BinStream:TMemoryStream;
+  StrStream: TStringStream;
+  s: string;
+begin
+  BinStream := TMemoryStream.Create;
+  try
+    StrStream := TStringStream.Create(s);
+    try
+      BinStream.WriteComponent(Component);
+      BinStream.Seek(0, soFromBeginning);
+      ObjectBinaryToText(BinStream, StrStream);
+      StrStream.Seek(0, soFromBeginning);
+      Result:= StrStream.DataString;
+    finally
+      StrStream.Free;
+    end;
+  finally
+    BinStream.Free
+  end;
+end;
+
+class function TStorable.StringToComponent(Value: string): TComponent;
+var
+  StrStream:TStringStream;
+  BinStream: TMemoryStream;
+begin
+  StrStream := TStringStream.Create(Value);
+  try
+    BinStream := TMemoryStream.Create;
+    try
+      ObjectTextToBinary(StrStream, BinStream);
+      BinStream.Seek(0, soFromBeginning);
+      Result:= BinStream.ReadComponent(nil);
+    finally
+      BinStream.Free;
+    end;
+  finally
+    StrStream.Free;
+  end;
+end;
+
+class function TStorable.CheckCreate(Instance: TComponent; ClassKind: TComponentClass; const Name: string = ''; const Owner: TComponent = nil): TComponent;
+begin
+  Result:= Instance;
+  if Result = nil then begin
+    if ((Name<>'') and (Owner<>nil)) then Result:= Owner.FindComponent(Name);
+    if Result = nil then begin
+      Result:= ClassKind.Create(Owner);
+      Result.Name:= Name;
+    end;
+  end;
+end;
+
+constructor TStorable.Create(AOwner: TComponent);
+begin
+  inherited;
+  SetSubComponent(true);
+end;
+
+function TStorable.Equals(Obj: TObject): Boolean;
+var
+  data1, data2: string;
+  name1, name2: TComponentName;
+  Other: TStorable;
+begin
+  if Obj is TStorable then begin
+    Other:= TStorable(Obj);
+    name1:= Self.Name;
+    name2:= Other.Name;
+    Self.Name:= '';
+    Other.Name:= '';
+    data1:= TStorable.ComponentToString(Self);
+    data2:= TStorable.ComponentToString(TStorable(Obj));
+    Self.Name:= name1;
+    Other.Name:= name2;
+    Result:= data1=data2;
+  end
+  else Result:= inherited;
+end;
+
+procedure TStorable.GetChildren(Proc: TGetChildProc; Root: TComponent);
+var
+  i: Integer;
+  OwnedComponent: TComponent;
+begin
+  inherited GetChildren(Proc, Root);
+//  if (Root = Self) then begin
+    for i:= 0 to ComponentCount - 1 do begin
+      OwnedComponent:= Components[I];
+      if not OwnedComponent.HasParent then begin
+        Proc(OwnedComponent);
+      end;
+    end;
+//  end;
+end;
+
+function TStorable.GetChildOwner: TComponent;
+begin
+  inherited;
+  Result:= Self;
 end;
 
 end.

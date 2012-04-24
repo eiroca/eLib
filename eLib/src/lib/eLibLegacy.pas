@@ -59,6 +59,14 @@ type
 
 implementation
 
+uses
+  System.Classes;
+
+resourcestring
+  errListCapacityError = 'List Capacity Error %d';
+  errListIndexError    = 'Out of index %d';
+  errListCountError    = 'List Count Error %d';
+
 procedure TObjectList.SetCapacity(NewCapacity: Integer);
 begin
   if (NewCapacity < FCount) then Error(errListCapacityError, NewCapacity);
