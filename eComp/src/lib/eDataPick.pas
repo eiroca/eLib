@@ -107,7 +107,7 @@ type
     published
      property Dim  : integer read GetDim write SetDim;
      property Count: integer read GetCount write SetCount;
-     property RawMode: boolean read FRawMode write FRawMode default true;
+     property RawMode: boolean read FRawMode write FRawMode default false;
   end;
 
 type
@@ -238,7 +238,7 @@ begin
   inherited Create(AOwner);
   FDim:= 0;
   setLength(Data, FDim);
-  FRawMode:= true;
+  FRawMode:= false;
   FullSave:= true;
 end;
 
