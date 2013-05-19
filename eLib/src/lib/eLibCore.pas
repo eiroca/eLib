@@ -436,12 +436,16 @@ type
      class function ComponentToString(Component: TComponent): string; static;
      class function StringToComponent(Value: string): TComponent; static;
      class function  CheckCreate(Instance: TComponent; ClassKind: TComponentClass; const Name: string = ''; const Owner: TComponent = nil): TComponent;
+   protected
+     procedure GetChildren(Proc: TGetChildProc; Root: TComponent); override;
+     function  GetChildOwner: TComponent; override;
     public
       constructor Create(AOwner: TComponent); override;
     public
      function  Equals(Obj: TObject): Boolean; override;
-     procedure GetChildren(Proc: TGetChildProc; Root: TComponent); override;
-     function  GetChildOwner: TComponent; override;
+     procedure _SetDouble(var Prop: double; const Value: double);
+     procedure _SetInt(var Prop: integer; const Value: integer);
+     procedure _SetBool(var Prop: Boolean; const Value: Boolean);
   end;
 
 implementation
@@ -2128,6 +2132,28 @@ begin
   SetSubComponent(true);
 end;
 
+procedure TStorable.GetChildren(Proc: TGetChildProc; Root: TComponent);
+var
+  i: Integer;
+  OwnedComponent: TComponent;
+begin
+  inherited GetChildren(Proc, Root);
+//  if (Root = Self) then begin
+    for i:= 0 to ComponentCount - 1 do begin
+      OwnedComponent:= Components[I];
+      if not OwnedComponent.HasParent then begin
+        Proc(OwnedComponent);
+      end;
+    end;
+//  end;
+end;
+
+function TStorable.GetChildOwner: TComponent;
+begin
+  inherited;
+  Result:= Self;
+end;
+
 function TStorable.Equals(Obj: TObject): Boolean;
 var
   data1, data2: string;
@@ -2149,26 +2175,31 @@ begin
   else Result:= inherited;
 end;
 
-procedure TStorable.GetChildren(Proc: TGetChildProc; Root: TComponent);
-var
-  i: Integer;
-  OwnedComponent: TComponent;
+const
+  errMsg = 'Read-Only proprety';
+
+procedure TStorable._SetDouble(var Prop: double; const Value: double);
 begin
-  inherited GetChildren(Proc, Root);
-//  if (Root = Self) then begin
-    for i:= 0 to ComponentCount - 1 do begin
-      OwnedComponent:= Components[I];
-      if not OwnedComponent.HasParent then begin
-        Proc(OwnedComponent);
-      end;
-    end;
-//  end;
+  if (csReading in ComponentState) then begin
+    Prop:= Value;
+  end
+  else raise EInvalidOperation.Create(errMsg);
 end;
 
-function TStorable.GetChildOwner: TComponent;
+procedure TStorable._SetInt(var Prop: integer; const Value: integer);
 begin
-  inherited;
-  Result:= Self;
+  if (csReading in ComponentState) then begin
+    Prop:= Value;
+  end
+  else raise EInvalidOperation.Create(errMsg);
+end;
+
+procedure TStorable._SetBool(var Prop: Boolean; const Value: Boolean);
+begin
+  if (csReading in ComponentState) then begin
+    Prop:= Value;
+  end
+  else raise EInvalidOperation.Create(errMsg);
 end;
 
 end.
