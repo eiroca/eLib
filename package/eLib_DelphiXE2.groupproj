@@ -1,0 +1,120 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{1C20D98D-05D1-40A2-9EC2-A65DF69CE77E}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="DelphiXE2\eLibPackage.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="DelphiXE2\eLibVCLPackage.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="DelphiXE2\eLibDBPackage.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="DelphiXE2\eLibBDEPackage.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="DelphiXE2\eLibRXPackage.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="DelphiXE2\eCompPackage.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="DelphiXE2\eCompBDEPackage.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="..\test\eLib_Tests.dproj">
+				<Dependencies/>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Default.Personality/>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="eLibPackage">
+			<MSBuild Projects="DelphiXE2\eLibPackage.dproj"/>
+		</Target>
+		<Target Name="eLibPackage:Clean">
+			<MSBuild Projects="DelphiXE2\eLibPackage.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="eLibPackage:Make">
+			<MSBuild Projects="DelphiXE2\eLibPackage.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="eLibVCLPackage">
+			<MSBuild Projects="DelphiXE2\eLibVCLPackage.dproj"/>
+		</Target>
+		<Target Name="eLibVCLPackage:Clean">
+			<MSBuild Projects="DelphiXE2\eLibVCLPackage.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="eLibVCLPackage:Make">
+			<MSBuild Projects="DelphiXE2\eLibVCLPackage.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="eLibDBPackage">
+			<MSBuild Projects="DelphiXE2\eLibDBPackage.dproj"/>
+		</Target>
+		<Target Name="eLibDBPackage:Clean">
+			<MSBuild Projects="DelphiXE2\eLibDBPackage.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="eLibDBPackage:Make">
+			<MSBuild Projects="DelphiXE2\eLibDBPackage.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="eLibBDEPackage">
+			<MSBuild Projects="DelphiXE2\eLibBDEPackage.dproj"/>
+		</Target>
+		<Target Name="eLibBDEPackage:Clean">
+			<MSBuild Projects="DelphiXE2\eLibBDEPackage.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="eLibBDEPackage:Make">
+			<MSBuild Projects="DelphiXE2\eLibBDEPackage.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="eLibRXPackage">
+			<MSBuild Projects="DelphiXE2\eLibRXPackage.dproj"/>
+		</Target>
+		<Target Name="eLibRXPackage:Clean">
+			<MSBuild Projects="DelphiXE2\eLibRXPackage.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="eLibRXPackage:Make">
+			<MSBuild Projects="DelphiXE2\eLibRXPackage.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="eCompPackage">
+			<MSBuild Projects="DelphiXE2\eCompPackage.dproj"/>
+		</Target>
+		<Target Name="eCompPackage:Clean">
+			<MSBuild Projects="DelphiXE2\eCompPackage.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="eCompPackage:Make">
+			<MSBuild Projects="DelphiXE2\eCompPackage.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="eCompBDEPackage">
+			<MSBuild Projects="DelphiXE2\eCompBDEPackage.dproj"/>
+		</Target>
+		<Target Name="eCompBDEPackage:Clean">
+			<MSBuild Projects="DelphiXE2\eCompBDEPackage.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="eCompBDEPackage:Make">
+			<MSBuild Projects="DelphiXE2\eCompBDEPackage.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="eLib_Tests">
+			<MSBuild Projects="..\test\eLib_Tests.dproj"/>
+		</Target>
+		<Target Name="eLib_Tests:Clean">
+			<MSBuild Projects="..\test\eLib_Tests.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="eLib_Tests:Make">
+			<MSBuild Projects="..\test\eLib_Tests.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="eLibPackage;eLibVCLPackage;eLibDBPackage;eLibBDEPackage;eLibRXPackage;eCompPackage;eCompBDEPackage;eLib_Tests"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="eLibPackage:Clean;eLibVCLPackage:Clean;eLibDBPackage:Clean;eLibBDEPackage:Clean;eLibRXPackage:Clean;eCompPackage:Clean;eCompBDEPackage:Clean;eLib_Tests:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="eLibPackage:Make;eLibVCLPackage:Make;eLibDBPackage:Make;eLibBDEPackage:Make;eLibRXPackage:Make;eCompPackage:Make;eCompBDEPackage:Make;eLib_Tests:Make"/>
+		</Target>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
+	</Project>
