@@ -17,45 +17,56 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 (*
  @author(Enrico Croce)
 *)
-package eLibRXPackage;
+package eCompPackage;
 
 {$R *.res}
+{$R '..\..\src\comp\eSillaba.dcr'}
+{$R '..\..\src\comp\eDataPick.dcr'}
+{$R '..\..\src\comp\eGauge.dcr'}
+{$R '..\..\src\comp\eReport.dcr'}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
-{$DEBUGINFO ON}
+{$DEBUGINFO OFF}
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
 {$LOCALSYMBOLS ON}
 {$LONGSTRINGS ON}
 {$OPENSTRINGS ON}
-{$OPTIMIZATION OFF}
+{$OPTIMIZATION ON}
 {$OVERFLOWCHECKS ON}
 {$RANGECHECKS ON}
 {$REFERENCEINFO ON}
 {$SAFEDIVIDE OFF}
-{$STACKFRAMES ON}
+{$STACKFRAMES OFF}
 {$TYPEDADDRESS OFF}
 {$VARSTRINGCHECKS ON}
 {$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
-{$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'eLib - RX Libraries'}
-{$LIBSUFFIX '160'}
-{$RUNONLY}
+{$DESCRIPTION 'EicLib - Visual Components'}
+{$LIBSUFFIX '210'}
 {$IMPLICITBUILD ON}
 
 requires
-  rtl,
   vcl,
-  RtmRxCtl160;
+  rtl,
+  designide,
+  vclactnband,
+  vclx,
+  eLibPackage,
+  eLibVCLPackage;
 
 contains
-  eLibRX in '..\..\src\lib\eLibRX.pas';
+  eSillaba in '..\..\src\comp\eSillaba.pas',
+  eComp in '..\..\src\comp\eComp.pas',
+  eDataPick in '..\..\src\comp\eDataPick.pas',
+  eGauge in '..\..\src\comp\eGauge.pas',
+  eReport in '..\..\src\comp\eReport.pas',
+  eReportPreview in '..\..\src\comp\eReportPreview.pas',
+  eReportEditor in '..\..\src\comp\eReportEditor.pas';
 
 end.
-

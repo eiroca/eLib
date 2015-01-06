@@ -98,7 +98,6 @@
 			</DelphiCompile>
 			<DCCReference Include="rtl.dcp"/>
 			<DCCReference Include="dbrtl.dcp"/>
-			<DCCReference Include="bdertl.dcp"/>
 			<DCCReference Include="vcl.dcp"/>
 			<DCCReference Include="..\..\src\lib\eLibDB.pas"/>
 			<BuildConfiguration Include="Release">

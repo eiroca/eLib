@@ -17,14 +17,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 (*
  @author(Enrico Croce)
 *)
-package eLibRXPackage;
+package eLibVCLPackage;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
-{$DEBUGINFO ON}
+{$DEBUGINFO OFF}
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
@@ -44,18 +44,21 @@ package eLibRXPackage;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'eLib - RX Libraries'}
-{$LIBSUFFIX '160'}
+{$DESCRIPTION 'ecLib - VCL Libraries'}
+{$LIBSUFFIX '210'}
 {$RUNONLY}
 {$IMPLICITBUILD ON}
 
 requires
-  rtl,
   vcl,
-  RtmRxCtl160;
+  rtl,
+  eLibPackage;
 
 contains
-  eLibRX in '..\..\src\lib\eLibRX.pas';
+  eLibVCL in '..\..\src\lib\eLibVCL.pas',
+  FAboutGPL in '..\..\src\lib\FAboutGPL.pas' {fmAboutGPL},
+  FWait in '..\..\src\lib\FWait.pas' {fmWait},
+  eLibSystem in '..\..\src\lib\eLibSystem.pas';
 
 end.
 

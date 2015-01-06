@@ -205,9 +205,9 @@ end;
 
 procedure AboutGPL(me: string);
 var
-  fmAbout: TfmAbout;
+  fmAbout: TfmAboutGPL;
 begin
-  fmAbout:= TfmAbout.Create(nil);
+  fmAbout:= TfmAboutGPL.Create(nil);
   try
     fmAbout.Caption:= 'About - ' + me;
     fmAbout.ShowModal;

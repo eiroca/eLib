@@ -56,7 +56,7 @@ requires
 
 contains
   eLibVCL in '..\..\src\lib\eLibVCL.pas',
-  FAboutGPL in '..\..\src\lib\FAboutGPL.pas' {fmAbout},
+  FAboutGPL in '..\..\src\lib\FAboutGPL.pas' {fmAboutGPL},
   FWait in '..\..\src\lib\FWait.pas' {fmWait},
   eLibSystem in '..\..\src\lib\eLibSystem.pas';
 

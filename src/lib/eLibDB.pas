@@ -22,7 +22,7 @@ unit eLibDB;
 interface
 
 uses
-  Controls, DB, DBTables;
+  Controls, DB;
 
 type
   DBUtil = class
@@ -30,11 +30,8 @@ type
     class procedure _SetEdit(ds: TDataSet); static;
     class function  CheckAbort(ds: TDataSource): TModalResult; static;
     class function  GetFldIndex(tb: TDataSet; const Fld: string): integer; static;
-    class procedure PostMaster(ds: TDataSource); static;
-    class procedure _PostMaster(ds: TDataSet); static;
     class function  DataTypeToStr(FT: TFieldType): string; static;
     class function  StrToDataType(S: string): TFieldType; static;
-    class procedure EmptyTable(var Table: TTable); static;
   end;
 
 implementation
@@ -81,29 +78,6 @@ begin
   end;
 end;
 
-class procedure DBUtil.PostMaster(ds: TDataSource);
-var
-  DataSet: TDataSet;
-begin
-  DataSet:= ds.DataSet;
-  if Assigned(DataSet) then begin
-    if (DataSet is TTable) then begin
-      if TTable(DataSet).MasterSource <> nil then begin
-        DataSet:= TTable(DataSet).MasterSource.DataSet;
-      end;
-    end;
-  end;
-  if DataSet <> nil then _PostMaster(DataSet);
-end;
-
-class procedure DBUtil._PostMaster(ds: TDataSet);
-begin
-  if ds.State = dsInsert then begin
-    ds.Post;
-    ds.Edit;
-  end;
-end;
-
 class function DBUtil.DataTypeToStr(FT: TFieldType): string;
 begin
   case FT of
@@ -147,23 +121,6 @@ begin
   if S='time'     then Result:= ftTime;
   if S='varbytes' then Result:= ftVarBytes;
   if S='word'     then Result:= ftWord;
-end;
-
-class procedure DBUtil.EmptyTable(var Table: TTable);
-  procedure DeleteRecByRec;
-  begin
-    Table.Active:= true;
-    Table.First;
-    while not Table.EOF do Table.Delete;
-  end;
-begin
-  Table.Active:= false;
-  try
-    Table.EmptyTable;
-    Table.Active:= true;
-  except
-    DeleteRecByRec;
-  end;
 end;
 
 end.

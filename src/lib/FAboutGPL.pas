@@ -25,7 +25,7 @@ uses
   SysUtils, Classes, Windows, Forms, Controls, StdCtrls, Buttons;
 
 type
-  TfmAbout = class(TForm)
+  TfmAboutGPL = class(TForm)
     BitBtn1: TBitBtn;
     Label1: TLabel;
   private

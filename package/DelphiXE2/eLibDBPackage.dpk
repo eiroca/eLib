@@ -52,7 +52,6 @@ package eLibDBPackage;
 requires
   rtl,
   dbrtl,
-  bdertl,
   vcl;
 
 contains

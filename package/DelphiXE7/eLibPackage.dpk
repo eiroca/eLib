@@ -17,14 +17,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 (*
  @author(Enrico Croce)
 *)
-package eLibRXPackage;
+package eLibPackage;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
-{$DEBUGINFO ON}
+{$DEBUGINFO OFF}
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
@@ -44,18 +44,22 @@ package eLibRXPackage;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'eLib - RX Libraries'}
-{$LIBSUFFIX '160'}
+{$DESCRIPTION 'eLib - Core Libraries'}
+{$LIBSUFFIX '210'}
 {$RUNONLY}
 {$IMPLICITBUILD ON}
 
 requires
-  rtl,
-  vcl,
-  RtmRxCtl160;
+  rtl;
 
 contains
-  eLibRX in '..\..\src\lib\eLibRX.pas';
+  eLibHashList in '..\..\src\lib\eLibHashList.pas',
+  eLibCore in '..\..\src\lib\eLibCore.pas',
+  eLibComplex in '..\..\src\lib\eLibComplex.pas',
+  eLibMath in '..\..\src\lib\eLibMath.pas',
+  eLibStat in '..\..\src\lib\eLibStat.pas',
+  eLibTAGExtractor in '..\..\src\lib\eLibTAGExtractor.pas',
+  eLibLegacy in '..\..\src\lib\eLibLegacy.pas';
 
 end.
 

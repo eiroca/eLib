@@ -24,7 +24,7 @@ package eLibRXPackage;
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
-{$DEBUGINFO ON}
+{$DEBUGINFO OFF}
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
@@ -45,14 +45,14 @@ package eLibRXPackage;
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'eLib - RX Libraries'}
-{$LIBSUFFIX '160'}
+{$LIBSUFFIX '210'}
 {$RUNONLY}
 {$IMPLICITBUILD ON}
 
 requires
   rtl,
   vcl,
-  RtmRxCtl160;
+  RtmRxCtl210;
 
 contains
   eLibRX in '..\..\src\lib\eLibRX.pas';

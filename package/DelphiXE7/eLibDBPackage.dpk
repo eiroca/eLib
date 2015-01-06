@@ -17,14 +17,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 (*
  @author(Enrico Croce)
 *)
-package eLibRXPackage;
+package eLibDBPackage;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
-{$DEBUGINFO ON}
+{$DEBUGINFO OFF}
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
@@ -44,18 +44,18 @@ package eLibRXPackage;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'eLib - RX Libraries'}
-{$LIBSUFFIX '160'}
+{$DESCRIPTION 'eLib - DB  Libraries'}
+{$LIBSUFFIX '210'}
 {$RUNONLY}
 {$IMPLICITBUILD ON}
 
 requires
   rtl,
-  vcl,
-  RtmRxCtl160;
+  dbrtl,
+  vcl;
 
 contains
-  eLibRX in '..\..\src\lib\eLibRX.pas';
+  eLibDB in '..\..\src\lib\eLibDB.pas';
 
 end.
 

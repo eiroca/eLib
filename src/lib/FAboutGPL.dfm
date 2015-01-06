@@ -1,4 +1,4 @@
-object fmAbout: TfmAbout
+object fmAboutGPL: TfmAboutGPL
   Left = 0
   Top = 0
   BorderStyle = bsDialog

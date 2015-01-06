@@ -101,7 +101,7 @@
 			<DCCReference Include="eLibPackage.dcp"/>
 			<DCCReference Include="..\..\src\lib\eLibVCL.pas"/>
 			<DCCReference Include="..\..\src\lib\FAboutGPL.pas">
-				<Form>fmAbout</Form>
+				<Form>fmAboutGPL</Form>
 			</DCCReference>
 			<DCCReference Include="..\..\src\lib\FWait.pas">
 				<Form>fmWait</Form>

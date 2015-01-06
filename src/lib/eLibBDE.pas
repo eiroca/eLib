@@ -25,6 +25,13 @@ uses
   BDE, DB, DBTables;
 
 type
+  DBEUtil = class
+    class procedure PostMaster(ds: TDataSource); static;
+    class procedure _PostMaster(ds: TDataSet); static;
+    class procedure EmptyTable(var Table: TTable); static;
+  end;
+
+type
   aCROpType  = array[0..29] of CROpType;
   aFLDDesc   = array[0..29] of FLDDesc;
   aIDXDesc   = array[0..29] of IDXDesc;
@@ -53,6 +60,46 @@ implementation
 
 uses
   SysUtils, eLibCore;
+
+class procedure DBEUtil.PostMaster(ds: TDataSource);
+var
+  DataSet: TDataSet;
+begin
+  DataSet:= ds.DataSet;
+  if Assigned(DataSet) then begin
+    if (DataSet is TTable) then begin
+      if TTable(DataSet).MasterSource <> nil then begin
+        DataSet:= TTable(DataSet).MasterSource.DataSet;
+      end;
+    end;
+  end;
+  if DataSet <> nil then _PostMaster(DataSet);
+end;
+
+class procedure DBEUtil._PostMaster(ds: TDataSet);
+begin
+  if ds.State = dsInsert then begin
+    ds.Post;
+    ds.Edit;
+  end;
+end;
+
+class procedure DBEUtil.EmptyTable(var Table: TTable);
+  procedure DeleteRecByRec;
+  begin
+    Table.Active:= true;
+    Table.First;
+    while not Table.EOF do Table.Delete;
+  end;
+begin
+  Table.Active:= false;
+  try
+    Table.EmptyTable;
+    Table.Active:= true;
+  except
+    DeleteRecByRec;
+  end;
+end;
 
 procedure DeleteAuxFiles(const szDirectory, szTblName, szTblType: string);
 var

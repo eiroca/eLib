@@ -98,8 +98,6 @@
 			</DelphiCompile>
 			<DCCReference Include="rtl.dcp"/>
 			<DCCReference Include="vcl.dcp"/>
-			<DCCReference Include="dbrtl.dcp"/>
-			<DCCReference Include="bdertl.dcp"/>
 			<DCCReference Include="RtmRxCtl160.dcp"/>
 			<DCCReference Include="..\..\src\lib\eLibRX.pas"/>
 			<BuildConfiguration Include="Release">
