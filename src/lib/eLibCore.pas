@@ -272,20 +272,22 @@ type
   end;
 
 type
+  TDirScan = class;
+
   TLogFunc = function(const path: string; const SRec: TSearchRec): boolean of object;
-  TDirChangeEvent   = function (Sender: TObject): boolean of object;
-  TProcessFileEvent = function (Sender: TObject; const SRec: TSearchRec): boolean of object;
+  TDirChangeEvent   = function (Sender: TDirScan): boolean of object;
+  TProcessFileEvent = function (Sender: TDirScan; const SRec: TSearchRec): boolean of object;
 
   eSortOrder = (soName, soSize, soTime);
 
   TFileElem = class
     public
      Path: String;
-     Size: integer;
+     Size: Int64;
      Time: TDateTime;
      TAG : integer;
     public
-      constructor Create(const APath: string; SRec: TSearchRec);
+      constructor Create(const APath: string; const SRec: TSearchRec);
   end;
 
   TDirScan = class(TComponent)
@@ -321,7 +323,7 @@ type
 
   TFiles = class(TList)
     protected
-     function ProcessFile(Sender: TObject; const SRec: TSearchRec): boolean;
+     function ProcessFile(Sender: TDirScan; const SRec: TSearchRec): boolean;
      function GetFileElem(i: integer): TFileElem;
     public
      property FileElem[i: integer]: TFileElem read GetFileElem;
@@ -357,7 +359,7 @@ type
      class function  ExtractFileNameWithoutExt(const FullPath: string): string; static;
      class function  Compare(const FE1, FE2: string): boolean; static;
      class function  CalcCRC(const FileName: string; maxSize: integer = -1): integer; static;
-     class function  GetFileSize(const FileName: string): integer; static;
+     class function  GetFileSize(const FileName: string): Int64; static;
      class function  isSystemAliasDirectory(const Name: string): boolean; static;
      class procedure DeleteFiles(sMask: string); static;
      class procedure Open(var f: text; Nam: string);
@@ -1430,7 +1432,7 @@ begin
   Result:= CompareDateTime(FE1.Time, FE2.Time);
 end;
 
-constructor TFileElem.Create(const APath: string; SRec: TSearchRec);
+constructor TFileElem.Create(const APath: string; const SRec: TSearchRec);
 begin
   Path:= APath;
   Size:= SRec.Size;
@@ -1477,15 +1479,13 @@ begin
   Result:= TFileElem(Items[i]);
 end;
 
-function TFiles.ProcessFile(Sender: TObject; const SRec: TSearchRec): boolean;
+function TFiles.ProcessFile(Sender: TDirScan; const SRec: TSearchRec): boolean;
 var
   fullName: string;
-  DS: TDirScan;
 begin
-  DS:= TDirScan(Sender);
   Result:= true;
-  if (DS.Tag = 1) then begin
-    fullName:= DS.CurDir+SRec.Name;
+  if (Sender.Tag = 1) then begin
+    fullName:= Sender.CurDir+SRec.Name;
   end
   else begin
     fullName:= SRec.Name;
@@ -1607,13 +1607,13 @@ begin
   Recurse(fullpath, mask);
 end;
 
-class function FileUtil.GetFileSize(const FileName: string): integer;
+class function FileUtil.GetFileSize(const FileName: string): Int64;
 var
-  Sr: TSearchRec;
+  SR: TSearchRec;
   DosError: integer;
 begin
   DosError:= FindFirst(FileName, faAnyFile and (not (faSysFile or faDirectory)),Sr);
-  if DosError=0 then GetFileSize:= Sr.size
+  if DosError=0 then GetFileSize:= SR.size
   else GetFileSize:= -1;
 end;
 
@@ -1661,7 +1661,8 @@ type
   PBuf = ^TBuf;
 var
   f1, f2: file;
-  FS1, FS2: integer;
+  FS1: Int64;
+  FS2: Int64;
   Buf1: PBuf;
   Buf2: PBuf;
   Siz1: integer;
