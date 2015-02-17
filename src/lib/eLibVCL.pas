@@ -73,7 +73,7 @@ procedure AboutGPL(me: string);
 implementation
 
 uses
-  Dialogs;
+  System.UITypes, Dialogs;
 
 procedure Rescale(Self: TForm; OldPixelsPerInch: longint);
 var
