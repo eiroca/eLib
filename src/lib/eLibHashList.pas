@@ -133,6 +133,10 @@
 }
 unit eLibHashList;
 
+{$IFDEF FPC}
+  {$MODE DELPHI}{$H+}
+{$ENDIF}
+
 interface
 
 uses

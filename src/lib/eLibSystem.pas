@@ -1,5 +1,5 @@
 (* GPL > 3.0
-Copyright (C) 1996-2015 eIrOcA Enrico Croce & Simona Burzio
+Copyright (C) 1996-2019 eIrOcA Enrico Croce & Simona Burzio
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,6 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *)
 unit eLibSystem;
 
+{$IFDEF FPC}
+  {$MODE DELPHI}{$H+}
+{$ENDIF}
+
 interface
 
 function  Execute(const Action, aFile, aParam: string): boolean;
@@ -26,11 +30,24 @@ function  Execute(const Action, aFile, aParam: string): boolean;
 implementation
 
 uses
- Windows, Forms, ShellAPI;
+{$IFDEF FPC}
+  Process
+{$ELSE}
+  Windows, ShellAPI
+{$ENDIF}
+;
 
- function Execute(const Action, aFile, aParam: string): boolean;
+function Execute(const Action, aFile, aParam: string): boolean;
+{$IFDEF FPC}
+var
+  s : ansistring;
+{$ENDIF}
 begin
-  Result:= ShellExecute(Application.Handle, PChar(Action), PChar(AFile), PChar(aParam), nil, SW_SHOWNORMAL) > 32;
+  {$IFDEF FPC}
+    RunCommand(Action, [aFile, aParam], s);
+  {$ELSE}
+    Result:= ShellExecute(0, PChar(Action), PChar(AFile), PChar(aParam), nil, SW_SHOWNORMAL) > 32;
+  {$ENDIF}
 end;
 
 end.

@@ -1,5 +1,5 @@
 (* GPL > 3.0
-Copyright (C) 1996-2015 eIrOcA Enrico Croce & Simona Burzio
+Copyright (C) 1996-2019 eIrOcA Enrico Croce & Simona Burzio
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,6 +18,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  @author(Enrico Croce)
 *)
 unit eLibCore;
+
+{$IFDEF FPC}
+  {$MODE DELPHI}{$H+}
+{$ENDIF}
 
 interface
 
@@ -183,7 +187,6 @@ type
       Fld     : TStringList;
       count   : integer;
     private
-      progress: IProgress;
       function GetChar(var src: TextFile): char;
       function ExecuteCallBack(var row: string; callBack: CSVCallBack): boolean;
     public
@@ -1059,9 +1062,6 @@ var
   ch, esc: char;
   i, inz, len: integer;
 begin
-  if (progress<>nil) then begin
-    progress.SetProgress(Count);
-  end;
   if ((row <> '') and (assigned(callback))) then begin
     i:= 1;
     esc:= #0;
@@ -1099,7 +1099,7 @@ end;
 
 procedure TCSVReader.Process(path: string; callBack: CSVCallBack; progress: IProgress);
 var
-  buffer: array[0..32*1024-1] of byte;
+  buffer: array[0..FILEBUFFERSIZE-1] of byte;
   src: TextFile;
   ch: char;
   row: string;
@@ -1136,8 +1136,11 @@ begin
             break;
           end;
         until false;
-        if Assigned(progress) and (progress.GetAborted) then begin
-          raise ECSVEOF.Create(sCSV_ABORTED);
+        if Assigned(progress) then begin
+          if (progress.GetAborted) then begin
+            raise ECSVEOF.Create(sCSV_ABORTED);
+          end;
+          progress.SetProgress(Count);
         end;
         if not ExecuteCallBack(row, callback) then begin
           raise ECSVEOF.Create(sCSV_STOPPED);
@@ -1436,7 +1439,11 @@ constructor TFileElem.Create(const APath: string; const SRec: TSearchRec);
 begin
   Path:= APath;
   Size:= SRec.Size;
-  Time:= SRec.TimeStamp;
+  {$IFDEF FPC}
+    Time:= SRec.Time;
+  {$ELSE}
+    Time:= SRec.TimeStamp;
+  {$ENDIF}
   TAG := 0;
 end;
 
@@ -1628,6 +1635,7 @@ var
   oldFileMode: integer;
 begin
   Result:= 0;
+  Siz:= 0;
   New(buf);
   AssignFile(f, FileName);
   oldFileMode:= FileMode;
@@ -1672,6 +1680,8 @@ var
   OldFileMode: integer;
 begin
   Result:= false;
+  Siz1:= 0;
+  Siz2:= 0;
   FS1:= GetFileSize(FE1);
   FS2:= GetFileSize(FE2);
   if (FS1=0) or (FS1 <> FS2) then exit;
