@@ -28,7 +28,7 @@ package eCompPackage;
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
-{$DEBUGINFO ON}
+{$DEBUGINFO OFF}
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
@@ -67,6 +67,10 @@ contains
   eGauge in '..\..\src\comp\eGauge.pas',
   eReport in '..\..\src\comp\eReport.pas',
   eReportPreview in '..\..\src\comp\eReportPreview.pas',
-  eReportEditor in '..\..\src\comp\eReportEditor.pas';
+  eReportEditor in '..\..\src\comp\eReportEditor.pas',
+  eBDE in '..\..\src\compLegacy\eBDE.pas',
+  eBDEXTab in '..\..\src\compLegacy\eBDEXTab.pas',
+  eBDEXTabEditor in '..\..\src\compLegacy\eBDEXTabEditor.pas',
+  eCompBDE in '..\..\src\compLegacy\eCompBDE.pas';
 
 end.

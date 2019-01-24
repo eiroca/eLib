@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <PathDelim Value="\"/>
+    <Name Value="eLibExtPackage"/>
+    <Type Value="RunAndDesignTime"/>
+    <Author Value="www.eiroca.net"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <PathDelim Value="\"/>
+      <SearchPaths>
+        <IncludeFiles Value="..\..\src\libVCL"/>
+        <OtherUnitFiles Value="..\..\src\libDB;..\..\src\libExt;..\..\src\libLegacy;..\..\src\libRX;..\..\src\libVCL"/>
+        <UnitOutputDirectory Value="$Env(BUILD_PATH)eLib\lib\$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Version Major="1"/>
+    <Files Count="8">
+      <Item1>
+        <Filename Value="..\..\src\libDB\eLibDB.pas"/>
+        <UnitName Value="eLibDB"/>
+      </Item1>
+      <Item2>
+        <Filename Value="..\..\src\libExt\eLibTAGExtractor.pas"/>
+        <UnitName Value="eLibTAGExtractor"/>
+      </Item2>
+      <Item3>
+        <Filename Value="..\..\src\libLegacy\eLibBDE.pas"/>
+        <UnitName Value="eLibBDE"/>
+      </Item3>
+      <Item4>
+        <Filename Value="..\..\src\libLegacy\eLibLegacy.pas"/>
+        <UnitName Value="eLibLegacy"/>
+      </Item4>
+      <Item5>
+        <Filename Value="..\..\src\libRX\eLibRX.pas"/>
+        <UnitName Value="eLibRX"/>
+      </Item5>
+      <Item6>
+        <Filename Value="..\..\src\libVCL\eLibVCL.pas"/>
+        <UnitName Value="eLibVCL"/>
+      </Item6>
+      <Item7>
+        <Filename Value="..\..\src\libVCL\FAboutGPL.pas"/>
+        <UnitName Value="FAboutGPL"/>
+      </Item7>
+      <Item8>
+        <Filename Value="..\..\src\libVCL\FWait.pas"/>
+        <UnitName Value="FWait"/>
+      </Item8>
+    </Files>
+    <RequiredPkgs Count="3">
+      <Item1>
+        <PackageName Value="eLibPackage"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="LCLBase"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="FCL"/>
+      </Item3>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>

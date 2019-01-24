@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{E24738C3-F27F-41C1-AAC2-210CBA495F07}</ProjectGuid>
+        <ProjectGuid>{9ADFFC5C-FB99-42DA-B365-01FACEE7EABB}</ProjectGuid>
         <MainSource>eLibExtPackage.dpk</MainSource>
         <ProjectVersion>18.5</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
@@ -47,7 +47,7 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
         <DCC_UnitSearchPath>$(BDSCOMMONDIR)\$(Platform)\$(Config);$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
-        <DCC_Description>eLib - RX Libraries</DCC_Description>
+        <DCC_Description>ecLib - VCL Libraries</DCC_Description>
         <DllSuffix>160</DllSuffix>
         <RuntimeOnlyPackage>true</RuntimeOnlyPackage>
         <VerInfo_Locale>1040</VerInfo_Locale>
@@ -106,8 +106,24 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
+        <DCCReference Include="vcl.dcp"/>
         <DCCReference Include="rtl.dcp"/>
+        <DCCReference Include="eLibPackage.dcp"/>
+        <DCCReference Include="dbrtl.dcp"/>
+        <DCCReference Include="..\..\src\libVCL\eLibVCL.pas"/>
+        <DCCReference Include="..\..\src\libVCL\FAboutGPL.pas">
+            <Form>fmAboutGPL</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\..\src\libVCL\FWait.pas">
+            <Form>fmWait</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\..\src\libDB\eLibDB.pas"/>
         <DCCReference Include="..\..\src\libExt\eLibTAGExtractor.pas"/>
+        <DCCReference Include="..\..\src\libLegacy\eLibBDE.pas"/>
+        <DCCReference Include="..\..\src\libLegacy\eLibLegacy.pas"/>
+        <DCCReference Include="..\..\src\libRX\eLibRX.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

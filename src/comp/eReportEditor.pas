@@ -1,5 +1,5 @@
 (* GPL > 3.0
-Copyright (C) 1996-2015 eIrOcA Enrico Croce & Simona Burzio
+Copyright (C) 1996-2019 eIrOcA Enrico Croce & Simona Burzio
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,12 +19,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *)
 unit eReportEditor;
 
+{$IFDEF FPC}
+  {$MODE DELPHI}{$H+}
+{$ENDIF}
+
 interface
 
+{$IFNDEF FPC}
 uses
   SysUtils, Windows, Messages, Classes, Graphics, Controls,
-  Forms, Dialogs, eReport, Buttons, StdCtrls,
-  DesignIntf, DesignEditors;
+  Forms, Dialogs, eReport, Buttons, StdCtrls
+  , DesignIntf, DesignEditors
+  ;
 
 type
   TfmEditFieldDefs = class(TForm)
@@ -78,9 +84,11 @@ type
 function EditFieldDefs(LF: TeLineFields): boolean;
 
 procedure Register;
+{$ENDIF}
 
 implementation
 
+{$IFNDEF FPC}
 {$R *.DFM}
 
 uses
@@ -326,6 +334,7 @@ begin
   RegisterPropertyEditor(TypeInfo(string), TeLineReport, 'DeviceKind', TDevicePropertyEditor);
   RegisterComponentEditor(TeLineFields, TeLineFieldsEditor);
 end;
+{$ENDIF}
 
 end.
 

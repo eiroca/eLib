@@ -1,5 +1,5 @@
 (* GPL > 3.0
-Copyright (C) 1996-2015 eIrOcA Enrico Croce & Simona Burzio
+Copyright (C) 1996-2019 eIrOcA Enrico Croce & Simona Burzio
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -40,6 +40,10 @@ type
 
 implementation
 
-{$R *.dfm}
+{$IFDEF FPC}
+  {$R *.LFM}
+{$ELSE}
+  {$R *.DFM}
+{$ENDIF}
 
 end.

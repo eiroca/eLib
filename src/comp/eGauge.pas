@@ -5,8 +5,13 @@
 *)
 unit eGauge;
 
+{$IFDEF FPC}
+  {$MODE DELPHI}{$H+}
+{$ENDIF}
+
 interface
 
+{$IFNDEF FPC}
 uses
   SysUtils, Types, Classes, Windows, Messages, Controls, Graphics,
   eLibCore, eComp;
@@ -71,8 +76,13 @@ type
   end;
 
 procedure Register;
+{$ENDIF}
 
 implementation
+
+{$IFNDEF FPC}
+resourcestring
+  SRangeError = 'Range check error';
 
 const
   DefGaugeWidth  =  50;
@@ -83,7 +93,7 @@ const
 
 procedure RangeError;
 begin
-  raise ERangeError.CreateRes(SRangeError);
+  raise ERangeError.Create(SRangeError);
 end;
 
 constructor TeGauge.Create(anOwner: TComponent);
@@ -290,6 +300,7 @@ procedure Register;
 begin
   RegisterComponents(eCompPage, [TeGauge]);
 end;
+{$ENDIF}
 
 end.
 

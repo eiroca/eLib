@@ -44,16 +44,26 @@ package eLibExtPackage;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'eLib - RX Libraries'}
+{$DESCRIPTION 'ecLib - VCL Libraries'}
 {$LIBSUFFIX '160'}
 {$RUNONLY}
 {$IMPLICITBUILD ON}
 
 requires
-  rtl;
+  vcl,
+  rtl,
+  eLibPackage,
+  dbrtl;
 
 contains
-  eLibTAGExtractor in '..\..\src\libExt\eLibTAGExtractor.pas';
+  eLibVCL in '..\..\src\libVCL\eLibVCL.pas',
+  FAboutGPL in '..\..\src\libVCL\FAboutGPL.pas' {fmAboutGPL},
+  FWait in '..\..\src\libVCL\FWait.pas' {fmWait},
+  eLibDB in '..\..\src\libDB\eLibDB.pas',
+  eLibTAGExtractor in '..\..\src\libExt\eLibTAGExtractor.pas',
+  eLibBDE in '..\..\src\libLegacy\eLibBDE.pas',
+  eLibLegacy in '..\..\src\libLegacy\eLibLegacy.pas',
+  eLibRX in '..\..\src\libRX\eLibRX.pas';
 
 end.
 

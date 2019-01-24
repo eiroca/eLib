@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <PathDelim Value="\"/>
+    <Name Value="eCompPackage"/>
+    <Type Value="RunAndDesignTime"/>
+    <Author Value="www.eiroca.net"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <PathDelim Value="\"/>
+      <SearchPaths>
+        <OtherUnitFiles Value="..\..\src\comp;..\..\src\compLegacy"/>
+        <UnitOutputDirectory Value="$Env(BUILD_PATH)eLib\lib\$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Version Major="1"/>
+    <Files Count="11">
+      <Item1>
+        <Filename Value="..\..\src\comp\eComp.pas"/>
+        <UnitName Value="eComp"/>
+      </Item1>
+      <Item2>
+        <Filename Value="..\..\src\comp\eDataPick.pas"/>
+        <UnitName Value="eDataPick"/>
+      </Item2>
+      <Item3>
+        <Filename Value="..\..\src\comp\eGauge.pas"/>
+        <UnitName Value="eGauge"/>
+      </Item3>
+      <Item4>
+        <Filename Value="..\..\src\comp\eReport.pas"/>
+        <UnitName Value="eReport"/>
+      </Item4>
+      <Item5>
+        <Filename Value="..\..\src\comp\eReportEditor.pas"/>
+        <UnitName Value="eReportEditor"/>
+      </Item5>
+      <Item6>
+        <Filename Value="..\..\src\comp\eReportPreview.pas"/>
+        <UnitName Value="eReportPreview"/>
+      </Item6>
+      <Item7>
+        <Filename Value="..\..\src\comp\eSillaba.pas"/>
+        <UnitName Value="eSillaba"/>
+      </Item7>
+      <Item8>
+        <Filename Value="..\..\src\compLegacy\eBDE.pas"/>
+        <UnitName Value="eBDE"/>
+      </Item8>
+      <Item9>
+        <Filename Value="..\..\src\compLegacy\eBDEXTab.pas"/>
+        <UnitName Value="eBDEXTab"/>
+      </Item9>
+      <Item10>
+        <Filename Value="..\..\src\compLegacy\eBDEXTabEditor.pas"/>
+        <UnitName Value="eBDEXTabEditor"/>
+      </Item10>
+      <Item11>
+        <Filename Value="..\..\src\compLegacy\eCompBDE.pas"/>
+        <UnitName Value="eCompBDE"/>
+      </Item11>
+    </Files>
+    <RequiredPkgs Count="3">
+      <Item1>
+        <PackageName Value="LCLBase"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="eLibPackage"/>
+        <MaxVersion Major="1"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="FCL"/>
+      </Item3>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>

@@ -6,25 +6,10 @@
         <Projects Include="DelphiRio\eLibPackage.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="DelphiRio\eLibVCLPackage.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="DelphiRio\eLibDBPackage.dproj">
-            <Dependencies/>
-        </Projects>
         <Projects Include="DelphiRio\eLibExtPackage.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="DelphiRio\eCompPackage.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="DelphiRio\eLibLegacyPackage.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="DelphiRio\eLibRXPackage.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="DelphiRio\eCompLegacyPackage.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="..\test\eLib_Tests.dproj">
@@ -47,24 +32,6 @@
     <Target Name="eLibPackage:Make">
         <MSBuild Projects="DelphiRio\eLibPackage.dproj" Targets="Make"/>
     </Target>
-    <Target Name="eLibVCLPackage">
-        <MSBuild Projects="DelphiRio\eLibVCLPackage.dproj"/>
-    </Target>
-    <Target Name="eLibVCLPackage:Clean">
-        <MSBuild Projects="DelphiRio\eLibVCLPackage.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="eLibVCLPackage:Make">
-        <MSBuild Projects="DelphiRio\eLibVCLPackage.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="eLibDBPackage">
-        <MSBuild Projects="DelphiRio\eLibDBPackage.dproj"/>
-    </Target>
-    <Target Name="eLibDBPackage:Clean">
-        <MSBuild Projects="DelphiRio\eLibDBPackage.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="eLibDBPackage:Make">
-        <MSBuild Projects="DelphiRio\eLibDBPackage.dproj" Targets="Make"/>
-    </Target>
     <Target Name="eLibExtPackage">
         <MSBuild Projects="DelphiRio\eLibExtPackage.dproj"/>
     </Target>
@@ -83,33 +50,6 @@
     <Target Name="eCompPackage:Make">
         <MSBuild Projects="DelphiRio\eCompPackage.dproj" Targets="Make"/>
     </Target>
-    <Target Name="eLibLegacyPackage">
-        <MSBuild Projects="DelphiRio\eLibLegacyPackage.dproj"/>
-    </Target>
-    <Target Name="eLibLegacyPackage:Clean">
-        <MSBuild Projects="DelphiRio\eLibLegacyPackage.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="eLibLegacyPackage:Make">
-        <MSBuild Projects="DelphiRio\eLibLegacyPackage.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="eLibRXPackage">
-        <MSBuild Projects="DelphiRio\eLibRXPackage.dproj"/>
-    </Target>
-    <Target Name="eLibRXPackage:Clean">
-        <MSBuild Projects="DelphiRio\eLibRXPackage.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="eLibRXPackage:Make">
-        <MSBuild Projects="DelphiRio\eLibRXPackage.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="eCompLegacyPackage">
-        <MSBuild Projects="DelphiRio\eCompLegacyPackage.dproj"/>
-    </Target>
-    <Target Name="eCompLegacyPackage:Clean">
-        <MSBuild Projects="DelphiRio\eCompLegacyPackage.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="eCompLegacyPackage:Make">
-        <MSBuild Projects="DelphiRio\eCompLegacyPackage.dproj" Targets="Make"/>
-    </Target>
     <Target Name="eLib_Tests">
         <MSBuild Projects="..\test\eLib_Tests.dproj"/>
     </Target>
@@ -120,13 +60,13 @@
         <MSBuild Projects="..\test\eLib_Tests.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="eLibPackage;eLibVCLPackage;eLibDBPackage;eLibExtPackage;eCompPackage;eLibLegacyPackage;eLibRXPackage;eCompLegacyPackage;eLib_Tests"/>
+        <CallTarget Targets="eLibPackage;eLibExtPackage;eCompPackage;eLib_Tests"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="eLibPackage:Clean;eLibVCLPackage:Clean;eLibDBPackage:Clean;eLibExtPackage:Clean;eCompPackage:Clean;eLibLegacyPackage:Clean;eLibRXPackage:Clean;eCompLegacyPackage:Clean;eLib_Tests:Clean"/>
+        <CallTarget Targets="eLibPackage:Clean;eLibExtPackage:Clean;eCompPackage:Clean;eLib_Tests:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="eLibPackage:Make;eLibVCLPackage:Make;eLibDBPackage:Make;eLibExtPackage:Make;eCompPackage:Make;eLibLegacyPackage:Make;eLibRXPackage:Make;eCompLegacyPackage:Make;eLib_Tests:Make"/>
+        <CallTarget Targets="eLibPackage:Make;eLibExtPackage:Make;eCompPackage:Make;eLib_Tests:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
