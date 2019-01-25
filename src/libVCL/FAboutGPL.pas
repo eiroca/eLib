@@ -38,6 +38,8 @@ type
     { Public declarations }
   end;
 
+procedure AboutGPL(me: string);
+
 implementation
 
 {$IFDEF FPC}
@@ -45,5 +47,18 @@ implementation
 {$ELSE}
   {$R *.DFM}
 {$ENDIF}
+
+procedure AboutGPL(me: string);
+var
+  fmAbout: TfmAboutGPL;
+begin
+  fmAbout:= TfmAboutGPL.Create(nil);
+  try
+    fmAbout.Caption:= 'About - ' + me;
+    fmAbout.ShowModal;
+  finally
+    fmAbout.Free;
+  end;
+end;
 
 end.

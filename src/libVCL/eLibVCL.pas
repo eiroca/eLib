@@ -77,8 +77,6 @@ type
        read GetAborted;
   end;
 
-procedure AboutGPL(me: string);
-
 implementation
 
 uses
@@ -212,19 +210,6 @@ end;
 destructor TProgress.Destroy;
 begin
   FreeAndNil(wait);
-end;
-
-procedure AboutGPL(me: string);
-var
-  fmAbout: TfmAboutGPL;
-begin
-  fmAbout:= TfmAboutGPL.Create(nil);
-  try
-    fmAbout.Caption:= 'About - ' + me;
-    fmAbout.ShowModal;
-  finally
-    fmAbout.Free;
-  end;
 end;
 
 end.
