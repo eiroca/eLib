@@ -7,6 +7,11 @@ object fmWait: TfmWait
   ClientHeight = 78
   ClientWidth = 219
   Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
   OldCreateOrder = True
   Scaled = False
   OnCloseQuery = FormCloseQuery
