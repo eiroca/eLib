@@ -80,7 +80,7 @@ type
 implementation
 
 uses
-  Dialogs;
+  Dialogs, System.UITypes;
 
 procedure Rescale(Self: TForm; OldPixelsPerInch: longint);
 var
